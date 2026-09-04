@@ -1,0 +1,1 @@
+"""Automatic challenge summary placeholder."""
