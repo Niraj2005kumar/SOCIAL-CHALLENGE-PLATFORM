@@ -2,7 +2,13 @@ const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
+
 const authRoutes = require("./routes/authRoutes");
+const challengeRoutes = require("./routes/challengeRoutes");
+const universityRoutes = require("./routes/universityRoutes");
+const dashboardRoutes = require("./routes/dashboardRoutes");
+const projectRoutes = require("./routes/projectRoutes");
+const industryRoutes = require("./routes/industryRoutes");
 
 dotenv.config();
 connectDB();
@@ -17,6 +23,11 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/auth", authRoutes);
+app.use("/api/challenges", challengeRoutes);
+app.use("/api/universities", universityRoutes);
+app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/projects", projectRoutes);
+app.use("/api/industry", industryRoutes);
 
 const PORT = process.env.PORT || 5000;
 
