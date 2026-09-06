@@ -1,6 +1,8 @@
 const University = require("../models/University");
 
-// Add a new university (Admin only)
+
+
+
 const addUniversity = async (req, res) => {
   try {
     const university = await University.create(req.body);
@@ -10,7 +12,8 @@ const addUniversity = async (req, res) => {
   }
 };
 
-// Get all universities
+
+
 const getUniversities = async (req, res) => {
   try {
     const universities = await University.find();
@@ -20,7 +23,9 @@ const getUniversities = async (req, res) => {
   }
 };
 
-// Get single university
+
+
+
 const getUniversityById = async (req, res) => {
   try {
     const university = await University.findById(req.params.id);

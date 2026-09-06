@@ -1,6 +1,7 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, File, UploadFile
 from pydantic import BaseModel
 from typing import Optional
+
 from services.category import classify_category
 from services.priority import calculate_priority
 from services.duplicate import add_challenge_to_index, check_duplicate
@@ -13,7 +14,9 @@ from services.scheme_matching import match_scheme
 from services.emotion_detection import detect_emotion
 from services.risk_prediction import predict_risk
 from services.summary import get_challenge_summary
-from models.llm_service import chatbot_reply, generate_impact_report
+from services.translation import translate_to_english
+from services.similar_cases import find_similar_solved_cases
+from models.llm_service import chatbot_reply, generate_impact_report, analyze_image
 
 app = FastAPI(title="Societal Innovation Collaboration Portal - AI Service")
 
@@ -38,6 +41,10 @@ class ImpactReportInput(BaseModel):
     outcome: Optional[str] = None
 
 
+class TranslateInput(BaseModel):
+    text: str
+
+
 @app.get("/")
 def read_root():
     return {"message": "AI Service is running"}
@@ -45,7 +52,8 @@ def read_root():
 
 @app.post("/analyze")
 def analyze_challenge(challenge: ChallengeInput):
-    text = f"{challenge.title} {challenge.description}"
+    translation_info = translate_to_english(f"{challenge.title} {challenge.description}")
+    text = translation_info["translatedText"]
 
     category = classify_category(text)
     priority = calculate_priority(text)
@@ -66,6 +74,7 @@ def analyze_challenge(challenge: ChallengeInput):
     emotion_info = detect_emotion(text)
     risk_info = predict_risk(challenge.district, category)
     summary = get_challenge_summary(challenge.title, challenge.description)
+    similar_cases_info = find_similar_solved_cases(text)
 
     final_priority = priority
     if emotion_info["emotionLevel"] == "Panic/Emergency":
@@ -91,7 +100,9 @@ def analyze_challenge(challenge: ChallengeInput):
         "schemeMatch": scheme_info,
         "emotionCheck": emotion_info,
         "riskPrediction": risk_info,
-        "suggestedTeam": team_info
+        "suggestedTeam": team_info,
+        "languageInfo": translation_info,
+        "similarSolvedCases": similar_cases_info
     }
 
 
@@ -105,3 +116,15 @@ def chat_with_bot(chat: ChatInput):
 def create_impact_report(report_data: ImpactReportInput):
     report_text = generate_impact_report(report_data.dict())
     return {"impactReport": report_text}
+
+
+@app.post("/translate")
+def translate_text(input_data: TranslateInput):
+    return translate_to_english(input_data.text)
+
+
+@app.post("/analyze-image")
+async def analyze_uploaded_image(file: UploadFile = File(...)):
+    image_bytes = await file.read()
+    result = analyze_image(image_bytes, file.content_type)
+    return result

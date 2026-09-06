@@ -1,6 +1,8 @@
 const Project = require("../models/Project");
 
-// Create a project (University)
+
+
+
 const createProject = async (req, res) => {
   try {
     const { challengeId, universityId, facultyMentor, teamMembers } = req.body;
@@ -18,7 +20,9 @@ const createProject = async (req, res) => {
   }
 };
 
-// Get all projects
+
+
+
 const getProjects = async (req, res) => {
   try {
     const projects = await Project.find()
@@ -30,7 +34,9 @@ const getProjects = async (req, res) => {
   }
 };
 
-// Update project status/proposal
+
+
+
 const updateProject = async (req, res) => {
   try {
     const { status, proposal, industryPartner } = req.body;

@@ -20,7 +20,9 @@ const getIndustryPartners = async (req, res) => {
   }
 };
 
-// Get single industry partner
+
+
+
 const getIndustryPartnerById = async (req, res) => {
   try {
     const partner = await IndustryPartner.findById(req.params.id);

@@ -1,0 +1,23 @@
+[
+  {
+    "id": "case1",
+    "title": "Flood water entering village homes near river",
+    "solution": "Built elevated walkway and improved drainage system with community's civil engineering department",
+    "district": "Dumka",
+    "outcome": "Reduced flooding impact by 70%, 45 families protected"
+  },
+  {
+    "id": "case2",
+    "title": "Crop pest destroying paddy fields",
+    "solution": "Developed low-cost bio-pesticide with agricultural university and distributed to 200 farmers",
+    "district": "Godda",
+    "outcome": "Crop loss reduced from 40% to 12%"
+  },
+  {
+    "id": "case3",
+    "title": "Drinking water contamination causing illness",
+    "solution": "Installed community filtration units after water testing by environmental science department",
+    "district": "Chatra",
+    "outcome": "Illness cases reduced by 80%, 1200 people benefited"
+  }
+]

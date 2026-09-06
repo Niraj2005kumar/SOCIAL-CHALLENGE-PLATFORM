@@ -1,11 +1,16 @@
+const axios = require("axios");
 const Challenge = require("../models/Challenge");
 const University = require("../models/University");
 
-// Submit a new challenge
+const AI_SERVICE_URL = "http://localhost:8000";
+
+
+
 const submitChallenge = async (req, res) => {
   try {
     const { title, description, location } = req.body;
 
+    // Pehle challenge create karo (basic info ke saath)
     const challenge = await Challenge.create({
       title,
       description,
@@ -13,13 +18,45 @@ const submitChallenge = async (req, res) => {
       submittedBy: req.user._id,
     });
 
-    res.status(201).json(challenge);
+
+
+    try {
+      const aiResponse = await axios.post(`${AI_SERVICE_URL}/analyze`, {
+        id: challenge._id.toString(),
+        title,
+        description,
+        district: location?.district,
+      });
+
+      const aiData = aiResponse.data;
+
+      // AI se mile data se challenge ko update karo
+      challenge.category = aiData.category;
+      challenge.priority = aiData.priority;
+
+      await challenge.save();
+
+      // Response mein AI ka poora analysis bhi bhejo
+      return res.status(201).json({
+        challenge,
+        aiAnalysis: aiData,
+      });
+    } catch (aiError) {
+      console.error("AI Service error:", aiError.message);
+      
+
+      return res.status(201).json({
+        challenge,
+        aiAnalysis: null,
+        warning: "AI analysis unavailable, challenge saved without it",
+      });
+    }
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-// Get all challenges
+
 const getChallenges = async (req, res) => {
   try {
     const challenges = await Challenge.find()
@@ -31,7 +68,8 @@ const getChallenges = async (req, res) => {
   }
 };
 
-// Get single challenge by ID
+
+
 const getChallengeById = async (req, res) => {
   try {
     const challenge = await Challenge.findById(req.params.id)
@@ -46,7 +84,8 @@ const getChallengeById = async (req, res) => {
   }
 };
 
-// Update challenge status (Admin only)
+
+
 const updateChallengeStatus = async (req, res) => {
   try {
     const { status, category, priority } = req.body;
@@ -68,7 +107,8 @@ const updateChallengeStatus = async (req, res) => {
   }
 };
 
-// Assign a university to a challenge (Admin only)
+
+
 const assignUniversity = async (req, res) => {
   try {
     const { universityId } = req.body;
