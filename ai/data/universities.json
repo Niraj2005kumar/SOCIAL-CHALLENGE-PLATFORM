@@ -1,1 +1,26 @@
-[]
+[
+  {
+    "id": "uni1",
+    "name": "BIT Mesra",
+    "district": "Ranchi",
+    "expertise": ["Civil Engineering", "Water Resources", "Disaster Management"]
+  },
+  {
+    "id": "uni2",
+    "name": "Birsa Agricultural University",
+    "district": "Ranchi",
+    "expertise": ["Agriculture", "Entomology", "Biotechnology"]
+  },
+  {
+    "id": "uni3",
+    "name": "RIMS Ranchi",
+    "district": "Ranchi",
+    "expertise": ["Healthcare", "Public Health"]
+  },
+  {
+    "id": "uni4",
+    "name": "Jharkhand University of Technology",
+    "district": "Ranchi",
+    "expertise": ["Computer Science", "Environmental Science", "Water Resources"]
+  }
+]

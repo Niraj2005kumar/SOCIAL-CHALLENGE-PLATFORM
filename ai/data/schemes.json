@@ -1,0 +1,32 @@
+[
+  {
+    "scheme": "Swachh Bharat Mission",
+    "category": "Sanitation",
+    "keywords": ["toilet", "sanitation", "open defecation", "cleanliness"]
+  },
+  {
+    "scheme": "Jal Jeevan Mission",
+    "category": "Water Resources",
+    "keywords": ["water", "drinking water", "pipeline", "tap water"]
+  },
+  {
+    "scheme": "Samagra Shiksha Abhiyan",
+    "category": "Education",
+    "keywords": ["school", "education", "teacher", "classroom"]
+  },
+  {
+    "scheme": "PM Fasal Bima Yojana",
+    "category": "Agriculture",
+    "keywords": ["crop", "fasal", "insurance", "farmer loss"]
+  },
+  {
+    "scheme": "Ayushman Bharat",
+    "category": "Healthcare",
+    "keywords": ["hospital", "health", "treatment", "medical"]
+  },
+  {
+    "scheme": "National Disaster Management Plan",
+    "category": "Disaster Management",
+    "keywords": ["flood", "disaster", "landslide", "emergency"]
+  }
+]

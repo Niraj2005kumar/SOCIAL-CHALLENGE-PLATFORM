@@ -1,8 +1,78 @@
 from fastapi import FastAPI
+from pydantic import BaseModel
+from typing import Optional
+from services.category import classify_category
+from services.priority import calculate_priority
+from services.duplicate import add_challenge_to_index, check_duplicate
+from services.university_matching import match_university
+from services.severity import calculate_severity
+from services.missing_details import check_missing_details
+from services.spam_detection import check_spam
+from services.team_suggestion import suggest_team
+from services.scheme_matching import match_scheme
+from services.emotion_detection import detect_emotion
+from services.risk_prediction import predict_risk
 
-app = FastAPI(title="Social Challenge Platform AI")
+app = FastAPI(title="Societal Innovation Collaboration Portal - AI Service")
 
 
-@app.get("/health")
-def health_check():
-    return {"status": "ok"}
+class ChallengeInput(BaseModel):
+    id: str
+    title: str
+    description: str
+    district: Optional[str] = None
+
+
+@app.get("/")
+def read_root():
+    return {"message": "AI Service is running"}
+
+
+@app.post("/analyze")
+def analyze_challenge(challenge: ChallengeInput):
+    text = f"{challenge.title} {challenge.description}"
+
+    category = classify_category(text)
+    priority = calculate_priority(text)
+    duplicate_info = check_duplicate(text)
+    university_matches = match_university(category)
+    severity_info = calculate_severity(text)
+    missing_info = check_missing_details(
+        challenge.title,
+        challenge.description,
+        {"district": challenge.district}
+    )
+    spam_info = check_spam(
+        challenge.title,
+        challenge.description,
+        {"district": challenge.district}
+    )
+    scheme_info = match_scheme(text)
+    emotion_info = detect_emotion(text)
+    risk_info = predict_risk(challenge.district, category)
+
+    final_priority = priority
+    if emotion_info["emotionLevel"] == "Panic/Emergency":
+        final_priority = "Critical"
+
+    team_info = None
+    if university_matches:
+        top_university = university_matches[0]
+        team_info = suggest_team(category, top_university["matchedExpertise"])
+
+    if not duplicate_info["isDuplicate"]:
+        add_challenge_to_index(challenge.id, text)
+
+    return {
+        "category": category,
+        "priority": final_priority,
+        "severity": severity_info,
+        "duplicateCheck": duplicate_info,
+        "universityMatches": university_matches,
+        "missingDetails": missing_info,
+        "spamCheck": spam_info,
+        "schemeMatch": scheme_info,
+        "emotionCheck": emotion_info,
+        "riskPrediction": risk_info,
+        "suggestedTeam": team_info
+    }

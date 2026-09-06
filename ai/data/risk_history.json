@@ -1,0 +1,8 @@
+[
+  { "district": "Sahibganj", "category": "Disaster Management", "floodCount": 8, "yearsTracked": 5 },
+  { "district": "Dumka", "category": "Disaster Management", "floodCount": 6, "yearsTracked": 5 },
+  { "district": "Godda", "category": "Disaster Management", "floodCount": 4, "yearsTracked": 5 },
+  { "district": "Ranchi", "category": "Disaster Management", "floodCount": 1, "yearsTracked": 5 },
+  { "district": "Chatra", "category": "Water Resources", "floodCount": 3, "yearsTracked": 5 },
+  { "district": "Pakur", "category": "Healthcare", "floodCount": 2, "yearsTracked": 5 }
+]
