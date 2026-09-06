@@ -9,6 +9,11 @@ const universityRoutes = require("./routes/universityRoutes");
 const dashboardRoutes = require("./routes/dashboardRoutes");
 const projectRoutes = require("./routes/projectRoutes");
 const industryRoutes = require("./routes/industryRoutes");
+const teamRoutes = require("./routes/teamRoutes");
+const milestoneRoutes = require("./routes/milestoneRoutes");
+const commentRoutes = require("./routes/commentRoutes");
+const notificationRoutes = require("./routes/notificationRoutes");
+const impactReportRoutes = require("./routes/impactReportRoutes");
 
 dotenv.config();
 connectDB();
@@ -28,6 +33,11 @@ app.use("/api/universities", universityRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/industry", industryRoutes);
+app.use("/api/teams", teamRoutes);
+app.use("/api/milestones", milestoneRoutes);
+app.use("/api/comments", commentRoutes);
+app.use("/api/notifications", notificationRoutes);
+app.use("/api/impact-reports", impactReportRoutes);
 
 const PORT = process.env.PORT || 5000;
 

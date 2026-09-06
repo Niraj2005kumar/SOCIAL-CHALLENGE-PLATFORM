@@ -4,47 +4,50 @@ const University = require("../models/University");
 
 const AI_SERVICE_URL = "http://localhost:8000";
 
-
-
+// Submit a new challenge
 const submitChallenge = async (req, res) => {
   try {
     const { title, description, location } = req.body;
 
-    // Pehle challenge create karo (basic info ke saath)
+   
+    const parsedLocation = typeof location === "string" ? JSON.parse(location) : location;
+
+    
+
+    const imagePaths = req.files ? req.files.map((file) => file.path) : [];
+
     const challenge = await Challenge.create({
       title,
       description,
-      location,
+      location: parsedLocation,
+      evidence: {
+        images: imagePaths,
+        videos: [],
+      },
       submittedBy: req.user._id,
     });
-
-
 
     try {
       const aiResponse = await axios.post(`${AI_SERVICE_URL}/analyze`, {
         id: challenge._id.toString(),
         title,
         description,
-        district: location?.district,
+        district: parsedLocation?.district,
       });
 
       const aiData = aiResponse.data;
 
-      // AI se mile data se challenge ko update karo
       challenge.category = aiData.category;
       challenge.priority = aiData.priority;
 
       await challenge.save();
 
-      // Response mein AI ka poora analysis bhi bhejo
       return res.status(201).json({
         challenge,
         aiAnalysis: aiData,
       });
     } catch (aiError) {
       console.error("AI Service error:", aiError.message);
-      
-
       return res.status(201).json({
         challenge,
         aiAnalysis: null,
@@ -55,6 +58,8 @@ const submitChallenge = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+
 
 
 const getChallenges = async (req, res) => {
