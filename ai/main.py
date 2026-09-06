@@ -12,6 +12,8 @@ from services.team_suggestion import suggest_team
 from services.scheme_matching import match_scheme
 from services.emotion_detection import detect_emotion
 from services.risk_prediction import predict_risk
+from services.summary import get_challenge_summary
+from models.llm_service import chatbot_reply, generate_impact_report
 
 app = FastAPI(title="Societal Innovation Collaboration Portal - AI Service")
 
@@ -21,6 +23,19 @@ class ChallengeInput(BaseModel):
     title: str
     description: str
     district: Optional[str] = None
+
+
+class ChatInput(BaseModel):
+    message: str
+    history: Optional[str] = ""
+
+
+class ImpactReportInput(BaseModel):
+    title: str
+    district: Optional[str] = None
+    peopleAffected: Optional[str] = None
+    solution: Optional[str] = None
+    outcome: Optional[str] = None
 
 
 @app.get("/")
@@ -50,6 +65,7 @@ def analyze_challenge(challenge: ChallengeInput):
     scheme_info = match_scheme(text)
     emotion_info = detect_emotion(text)
     risk_info = predict_risk(challenge.district, category)
+    summary = get_challenge_summary(challenge.title, challenge.description)
 
     final_priority = priority
     if emotion_info["emotionLevel"] == "Panic/Emergency":
@@ -66,6 +82,7 @@ def analyze_challenge(challenge: ChallengeInput):
     return {
         "category": category,
         "priority": final_priority,
+        "summary": summary,
         "severity": severity_info,
         "duplicateCheck": duplicate_info,
         "universityMatches": university_matches,
@@ -76,3 +93,15 @@ def analyze_challenge(challenge: ChallengeInput):
         "riskPrediction": risk_info,
         "suggestedTeam": team_info
     }
+
+
+@app.post("/chatbot")
+def chat_with_bot(chat: ChatInput):
+    reply = chatbot_reply(chat.message, chat.history)
+    return {"reply": reply}
+
+
+@app.post("/impact-report")
+def create_impact_report(report_data: ImpactReportInput):
+    report_text = generate_impact_report(report_data.dict())
+    return {"impactReport": report_text}
