@@ -276,7 +276,7 @@ export default function Navbar({
 
           {/* Login / Action CTA */}
           <button
-            onClick={() => onOpenAuth ? onOpenAuth('login') : onSelectRole('citizen')}
+            onClick={() => onOpenAuth ? onOpenAuth('citizen') : onSelectRole('citizen')}
             style={{
               padding: '6px 12px',
               fontSize: '12.5px',
