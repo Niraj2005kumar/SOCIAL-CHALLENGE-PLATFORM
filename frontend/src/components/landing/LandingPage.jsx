@@ -20,9 +20,11 @@ import {
   Camera,
   Layers,
   HeartHandshake,
-  Search
+  Search,
+  Leaf
 } from 'lucide-react';
 import heroBannerImg from '../../assets/hero.png';
+import LivePortalEcosystem from './LivePortalEcosystem';
 import JharkhandLogo from '../common/JharkhandLogo';
 import { JHARKHAND_DISTRICTS, PLATFORM_STATS, MOCK_CHALLENGES } from '../../data/mockData';
 
@@ -151,6 +153,50 @@ export default function LandingPage({ onSelectRole, onOpenSearch, showToast }) {
           backgroundSize: 'cover',
         }}
       >
+        <div className="reference-hero-copy">
+          <div className="reference-hero-topline">PEOPLE<br />PROBLEMS<br />POSSIBILITIES</div>
+          <div className="reference-hero-slogan">Real Problems<br />Real People<br />Real Change</div>
+
+          <div className="reference-hero-center">
+            <div>this is our</div>
+            <strong>JHARKHAND</strong>
+            <small>PEOPLE&nbsp;&nbsp;•&nbsp;&nbsp;NATURE&nbsp;&nbsp;•&nbsp;&nbsp;PROGRESS</small>
+          </div>
+
+          <div className="reference-hero-features">
+            <div><Leaf size={25} /> <span>CLEANER<br />ENVIRONMENT</span></div>
+            <div><Users size={25} /> <span>EMPOWERED<br />CITIZENS</span></div>
+            <div><Sparkles size={25} /> <span>SMART<br />SOLUTIONS</span></div>
+            <div><TrendingUp size={25} /> <span>BRIGHTER<br />TOMORROW</span></div>
+          </div>
+
+          <div className="reference-hero-bottom-left">
+            <div className="reference-hero-handwritten">Better Roads<br />Stronger Communities</div>
+            <h1>Societal Innovation<br />Collaboration Portal</h1>
+            <p>Identify&nbsp;&nbsp; | &nbsp;&nbsp;Collaborate&nbsp;&nbsp; | &nbsp;&nbsp;Solve&nbsp;&nbsp; | &nbsp;&nbsp;Create Impact</p>
+            <div className="reference-hero-actions">
+              <button type="button" onClick={() => {
+                onSelectRole('citizen');
+                showToast?.('Switched to Citizen Portal — report your challenge!', 'info');
+              }}>
+                Report a Challenge <ArrowRight size={17} />
+              </button>
+              <button type="button" onClick={onOpenSearch}>Explore Solutions</button>
+            </div>
+          </div>
+
+          <div className="reference-hero-stats">
+            <div><strong>{counts.challenges.toLocaleString()}</strong><span>Challenges</span></div>
+            <div><strong>{counts.institutions.toLocaleString()}</strong><span>Institutions</span></div>
+            <div><strong>{counts.citizens.toLocaleString()}</strong><span>Citizens</span></div>
+            <div><strong>{counts.solutions.toLocaleString()}</strong><span>Solutions in Progress</span></div>
+          </div>
+
+          <div className="reference-hero-bottom-right">
+            <div className="reference-hero-handwritten">A Stronger<br />Jharkhand Together</div>
+            <div>HERITAGE&nbsp;&nbsp; | &nbsp;&nbsp;PEOPLE&nbsp;&nbsp; | &nbsp;&nbsp;POSSIBILITIES</div>
+          </div>
+        </div>
         <div
           style={{
             display: 'grid',
@@ -968,669 +1014,17 @@ export default function LandingPage({ onSelectRole, onOpenSearch, showToast }) {
         </div>
       </section>
 
-      {/* 3. 4-DASHBOARD CONDENSED LIVE PREVIEW STRIP (Matching the Reference UI Layout) */}
+      {/* 3. LIVE PORTAL ECOSYSTEM SECTION */}
       <section
+        id="live-portal-ecosystem"
+        aria-label="Live Portal Ecosystem"
         style={{
-          padding: '20px 20px 60px',
+          padding: '24px 20px 60px',
           maxWidth: '1380px',
           margin: '0 auto',
         }}
       >
-        <div style={{ marginBottom: '20px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-            <Layers size={18} style={{ color: 'var(--primary)' }} />
-            <h2 style={{ fontSize: '22px', fontWeight: 800, color: 'var(--text-primary)', margin: 0 }}>
-              Live Portal Ecosystem
-            </h2>
-          </div>
-          <p style={{ fontSize: '13.5px', color: 'var(--text-muted)', margin: 0 }}>
-            Unified collaboration across 4 specialized roles: Citizens, Government Administration, Universities, and CSR Industry Partners.
-          </p>
-        </div>
-
-        {/* 4 Cards Row */}
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(4, 1fr)',
-            gap: '20px',
-            alignItems: 'stretch',
-          }}
-          className="dashboard-preview-strip"
-        >
-          {/* ================= PREVIEW CARD 1: CITIZEN DASHBOARD ================= */}
-          <div
-            style={{
-              backgroundColor: 'var(--bg-card)',
-              borderRadius: '18px',
-              border: '1px solid var(--border-subtle)',
-              boxShadow: 'var(--shadow-card)',
-              overflow: 'hidden',
-              display: 'flex',
-              flexDirection: 'column',
-              transition: 'all var(--transition-normal)',
-            }}
-            className="hover-lift"
-          >
-            {/* Header */}
-            <div
-              style={{
-                padding: '16px 18px',
-                borderBottom: '1px solid var(--border-subtle)',
-                backgroundColor: 'var(--role-citizen-subtle)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <JharkhandLogo mode="navbar" size={28} />
-                <div>
-                  <h4 style={{ fontSize: '13.5px', fontWeight: 800, color: 'var(--text-primary)', margin: 0 }}>
-                    Citizen Dashboard
-                  </h4>
-                  <p style={{ fontSize: '11px', color: 'var(--text-muted)', margin: 0 }}>
-                    Submit a Challenge
-                  </p>
-                </div>
-              </div>
-              <span
-                style={{
-                  fontSize: '10px',
-                  fontWeight: 800,
-                  backgroundColor: 'var(--role-citizen)',
-                  color: '#ffffff',
-                  padding: '2px 8px',
-                  borderRadius: '999px',
-                }}
-              >
-                CITIZEN
-              </span>
-            </div>
-
-            {/* Simulated Form Body */}
-            <div style={{ padding: '16px 18px', flex: 1, display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              <div>
-                <label style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)' }}>
-                  Problem Title *
-                </label>
-                <div
-                  style={{
-                    fontSize: '11.5px',
-                    padding: '8px 10px',
-                    borderRadius: '6px',
-                    border: '1px solid var(--border-strong)',
-                    backgroundColor: 'var(--bg-subtle)',
-                    color: 'var(--text-muted)',
-                    marginTop: '4px',
-                  }}
-                >
-                  e.g. High fluoride water in Angara village borewells
-                </div>
-              </div>
-
-              <div>
-                <label style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)' }}>
-                  Description *
-                </label>
-                <div
-                  style={{
-                    fontSize: '11px',
-                    padding: '8px 10px',
-                    borderRadius: '6px',
-                    border: '1px solid var(--border-strong)',
-                    backgroundColor: 'var(--bg-subtle)',
-                    color: 'var(--text-secondary)',
-                    marginTop: '4px',
-                    height: '52px',
-                    overflow: 'hidden',
-                    lineHeight: 1.4,
-                  }}
-                >
-                  Handpumps across 12 hamlets yield yellow tinted water. Villagers facing joint pain...
-                </div>
-              </div>
-
-              {/* Location Mock Pickers */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '6px' }}>
-                <div style={{ fontSize: '10px', padding: '5px', backgroundColor: 'var(--bg-subtle)', borderRadius: '4px', textAlign: 'center', border: '1px solid var(--border-subtle)' }}>
-                  Ranchi
-                </div>
-                <div style={{ fontSize: '10px', padding: '5px', backgroundColor: 'var(--bg-subtle)', borderRadius: '4px', textAlign: 'center', border: '1px solid var(--border-subtle)' }}>
-                  Angara
-                </div>
-                <div style={{ fontSize: '10px', padding: '5px', backgroundColor: 'var(--bg-subtle)', borderRadius: '4px', textAlign: 'center', border: '1px solid var(--border-subtle)' }}>
-                  Hesal
-                </div>
-              </div>
-
-              {/* Media Buttons */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '6px',
-                    padding: '8px',
-                    borderRadius: '6px',
-                    border: '1px dashed var(--border-strong)',
-                    fontSize: '10.5px',
-                    color: 'var(--text-muted)',
-                  }}
-                >
-                  <Camera size={13} />
-                  <span>Upload Photos</span>
-                </div>
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '6px',
-                    padding: '8px',
-                    borderRadius: '6px',
-                    border: '1px dashed var(--role-citizen)',
-                    backgroundColor: 'var(--role-citizen-subtle)',
-                    fontSize: '10.5px',
-                    color: 'var(--role-citizen)',
-                    fontWeight: 600,
-                  }}
-                >
-                  <Mic size={13} />
-                  <span>Record Voice</span>
-                </div>
-              </div>
-
-              {/* AI Analysis Preview Tag */}
-              <div
-                style={{
-                  padding: '8px 10px',
-                  borderRadius: '6px',
-                  backgroundColor: 'var(--primary-subtle)',
-                  border: '1px solid rgba(37, 99, 235, 0.2)',
-                  fontSize: '10.5px',
-                  color: 'var(--primary)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                }}
-              >
-                <Sparkles size={13} />
-                <span>AI: Water & Sanitation • Priority: Critical</span>
-              </div>
-            </div>
-
-            {/* Launch Button */}
-            <div style={{ padding: '12px 18px', borderTop: '1px solid var(--border-subtle)' }}>
-              <button
-                onClick={() => onSelectRole('citizen')}
-                style={{
-                  width: '100%',
-                  padding: '10px',
-                  borderRadius: '8px',
-                  backgroundColor: 'var(--role-citizen)',
-                  color: '#ffffff',
-                  fontWeight: 700,
-                  fontSize: '13px',
-                  border: 'none',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '6px',
-                }}
-              >
-                <span>Launch Citizen Portal</span>
-                <ArrowRight size={14} />
-              </button>
-            </div>
-          </div>
-
-          {/* ================= PREVIEW CARD 2: ADMIN DASHBOARD ================= */}
-          <div
-            style={{
-              backgroundColor: 'var(--bg-card)',
-              borderRadius: '18px',
-              border: '1px solid var(--border-subtle)',
-              boxShadow: 'var(--shadow-card)',
-              overflow: 'hidden',
-              display: 'flex',
-              flexDirection: 'column',
-              transition: 'all var(--transition-normal)',
-            }}
-            className="hover-lift"
-          >
-            {/* Header */}
-            <div
-              style={{
-                padding: '16px 18px',
-                borderBottom: '1px solid var(--border-subtle)',
-                backgroundColor: 'var(--role-gov-subtle)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <JharkhandLogo mode="navbar" size={28} />
-                <div>
-                  <h4 style={{ fontSize: '13.5px', fontWeight: 800, color: 'var(--text-primary)', margin: 0 }}>
-                    Government Admin
-                  </h4>
-                  <p style={{ fontSize: '11px', color: 'var(--text-muted)', margin: 0 }}>
-                    Statewide Oversight
-                  </p>
-                </div>
-              </div>
-              <span
-                style={{
-                  fontSize: '10px',
-                  fontWeight: 800,
-                  backgroundColor: 'var(--role-gov)',
-                  color: '#ffffff',
-                  padding: '2px 8px',
-                  borderRadius: '999px',
-                }}
-              >
-                ADMIN
-              </span>
-            </div>
-
-            {/* Metrics & Donut Preview */}
-            <div style={{ padding: '16px 18px', flex: 1, display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              {/* Mini 4 KPIs */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px' }}>
-                <div style={{ padding: '8px', borderRadius: '8px', backgroundColor: 'var(--bg-subtle)' }}>
-                  <div style={{ fontSize: '16px', fontWeight: 800, color: 'var(--text-primary)' }}>1,248</div>
-                  <div style={{ fontSize: '10px', color: 'var(--text-muted)' }}>Total Challenges (+12%)</div>
-                </div>
-                <div style={{ padding: '8px', borderRadius: '8px', backgroundColor: 'var(--bg-subtle)' }}>
-                  <div style={{ fontSize: '16px', fontWeight: 800, color: 'var(--status-critical)' }}>320</div>
-                  <div style={{ fontSize: '10px', color: 'var(--text-muted)' }}>Under Review (+5%)</div>
-                </div>
-                <div style={{ padding: '8px', borderRadius: '8px', backgroundColor: 'var(--bg-subtle)' }}>
-                  <div style={{ fontSize: '16px', fontWeight: 800, color: 'var(--role-industry)' }}>612</div>
-                  <div style={{ fontSize: '10px', color: 'var(--text-muted)' }}>In Progress (+18%)</div>
-                </div>
-                <div style={{ padding: '8px', borderRadius: '8px', backgroundColor: 'var(--bg-subtle)' }}>
-                  <div style={{ fontSize: '16px', fontWeight: 800, color: 'var(--role-citizen)' }}>316</div>
-                  <div style={{ fontSize: '10px', color: 'var(--text-muted)' }}>Resolved (+22%)</div>
-                </div>
-              </div>
-
-              {/* Category Breakdown Bar */}
-              <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10.5px', marginBottom: '4px' }}>
-                  <span style={{ fontWeight: 600, color: 'var(--text-secondary)' }}>Categories</span>
-                  <span style={{ color: 'var(--text-muted)' }}>Water 26% • Infra 22%</span>
-                </div>
-                <div style={{ height: '6px', borderRadius: '999px', display: 'flex', overflow: 'hidden' }}>
-                  <div style={{ width: '26%', backgroundColor: '#2563EB' }} />
-                  <div style={{ width: '22%', backgroundColor: '#F59E0B' }} />
-                  <div style={{ width: '19%', backgroundColor: '#8B5CF6' }} />
-                  <div style={{ width: '12%', backgroundColor: '#EC4899' }} />
-                  <div style={{ width: '21%', backgroundColor: '#10B981' }} />
-                </div>
-              </div>
-
-              {/* Recent Ticker item */}
-              <div
-                style={{
-                  padding: '8px 10px',
-                  borderRadius: '6px',
-                  border: '1px solid var(--border-subtle)',
-                  backgroundColor: 'var(--bg-subtle)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                }}
-              >
-                <div>
-                  <div style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-primary)' }}>
-                    Fluoride borewells in Angara
-                  </div>
-                  <div style={{ fontSize: '10px', color: 'var(--text-muted)' }}>Ranchi • 2h ago</div>
-                </div>
-                <span
-                  style={{
-                    fontSize: '9.5px',
-                    fontWeight: 700,
-                    color: 'var(--status-critical)',
-                    backgroundColor: 'var(--status-critical-subtle)',
-                    padding: '2px 6px',
-                    borderRadius: '4px',
-                  }}
-                  className="animate-pulse-critical"
-                >
-                  Critical
-                </span>
-              </div>
-            </div>
-
-            {/* Launch Button */}
-            <div style={{ padding: '12px 18px', borderTop: '1px solid var(--border-subtle)' }}>
-              <button
-                onClick={() => onSelectRole('admin')}
-                style={{
-                  width: '100%',
-                  padding: '10px',
-                  borderRadius: '8px',
-                  backgroundColor: 'var(--role-gov)',
-                  color: '#ffffff',
-                  fontWeight: 700,
-                  fontSize: '13px',
-                  border: 'none',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '6px',
-                }}
-              >
-                <span>Launch Admin Portal</span>
-                <ArrowRight size={14} />
-              </button>
-            </div>
-          </div>
-
-          {/* ================= PREVIEW CARD 3: UNIVERSITY DASHBOARD ================= */}
-          <div
-            style={{
-              backgroundColor: 'var(--bg-card)',
-              borderRadius: '18px',
-              border: '1px solid var(--border-subtle)',
-              boxShadow: 'var(--shadow-card)',
-              overflow: 'hidden',
-              display: 'flex',
-              flexDirection: 'column',
-              transition: 'all var(--transition-normal)',
-            }}
-            className="hover-lift"
-          >
-            {/* Header */}
-            <div
-              style={{
-                padding: '16px 18px',
-                borderBottom: '1px solid var(--border-subtle)',
-                backgroundColor: 'var(--role-university-subtle)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <JharkhandLogo mode="navbar" size={28} />
-                <div>
-                  <h4 style={{ fontSize: '13.5px', fontWeight: 800, color: 'var(--text-primary)', margin: 0 }}>
-                    University Hub
-                  </h4>
-                  <p style={{ fontSize: '11px', color: 'var(--text-muted)', margin: 0 }}>
-                    Assigned Challenges
-                  </p>
-                </div>
-              </div>
-              <span
-                style={{
-                  fontSize: '10px',
-                  fontWeight: 800,
-                  backgroundColor: 'var(--role-university)',
-                  color: '#ffffff',
-                  padding: '2px 8px',
-                  borderRadius: '999px',
-                }}
-              >
-                ACADEMIA
-              </span>
-            </div>
-
-            {/* University Content Preview */}
-            <div style={{ padding: '16px 18px', flex: 1, display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              {/* Tab mock */}
-              <div style={{ display: 'flex', gap: '4px', backgroundColor: 'var(--bg-subtle)', padding: '3px', borderRadius: '6px' }}>
-                <div style={{ flex: 1, fontSize: '10.5px', fontWeight: 700, textAlign: 'center', padding: '4px', backgroundColor: 'var(--bg-card)', borderRadius: '4px', color: 'var(--role-university)' }}>
-                  All (8)
-                </div>
-                <div style={{ flex: 1, fontSize: '10.5px', fontWeight: 500, textAlign: 'center', padding: '4px', color: 'var(--text-muted)' }}>
-                  New (3)
-                </div>
-                <div style={{ flex: 1, fontSize: '10.5px', fontWeight: 500, textAlign: 'center', padding: '4px', color: 'var(--text-muted)' }}>
-                  In Prog (4)
-                </div>
-              </div>
-
-              {/* Challenge Card Preview */}
-              <div
-                style={{
-                  padding: '10px',
-                  borderRadius: '8px',
-                  border: '1px solid var(--border-subtle)',
-                  backgroundColor: 'var(--bg-subtle)',
-                }}
-              >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '4px' }}>
-                  <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-primary)', lineHeight: 1.3 }}>
-                    Safe Drinking Water Solution
-                  </span>
-                  <span style={{ fontSize: '9px', fontWeight: 700, color: 'var(--primary)', backgroundColor: 'var(--primary-subtle)', padding: '1px 5px', borderRadius: '4px' }}>
-                    96% AI Match
-                  </span>
-                </div>
-                <p style={{ fontSize: '10.5px', color: 'var(--text-muted)', margin: '2px 0 6px' }}>
-                  Ranchi, Jharkhand • Water & Sanitation
-                </p>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span style={{ fontSize: '9.5px', color: 'var(--text-muted)' }}>Matched: BIT Mesra</span>
-                  <button
-                    onClick={() => onSelectRole('university')}
-                    style={{
-                      fontSize: '10.5px',
-                      fontWeight: 700,
-                      backgroundColor: 'var(--role-university)',
-                      color: '#ffffff',
-                      border: 'none',
-                      padding: '4px 8px',
-                      borderRadius: '4px',
-                      cursor: 'pointer',
-                    }}
-                  >
-                    Accept
-                  </button>
-                </div>
-              </div>
-
-              {/* Form a Team banner */}
-              <div
-                style={{
-                  padding: '8px 10px',
-                  borderRadius: '6px',
-                  border: '1px dashed var(--role-university)',
-                  backgroundColor: 'var(--role-university-subtle)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                }}
-              >
-                <div>
-                  <div style={{ fontSize: '11px', fontWeight: 700, color: 'var(--role-university)' }}>Form a Team</div>
-                  <div style={{ fontSize: '9.5px', color: 'var(--text-muted)' }}>Faculty mentor + 3 students</div>
-                </div>
-                <ChevronRight size={14} style={{ color: 'var(--role-university)' }} />
-              </div>
-            </div>
-
-            {/* Launch Button */}
-            <div style={{ padding: '12px 18px', borderTop: '1px solid var(--border-subtle)' }}>
-              <button
-                onClick={() => onSelectRole('university')}
-                style={{
-                  width: '100%',
-                  padding: '10px',
-                  borderRadius: '8px',
-                  backgroundColor: 'var(--role-university)',
-                  color: '#ffffff',
-                  fontWeight: 700,
-                  fontSize: '13px',
-                  border: 'none',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '6px',
-                }}
-              >
-                <span>Launch University Hub</span>
-                <ArrowRight size={14} />
-              </button>
-            </div>
-          </div>
-
-          {/* ================= PREVIEW CARD 4: INDUSTRY DASHBOARD ================= */}
-          <div
-            style={{
-              backgroundColor: 'var(--bg-card)',
-              borderRadius: '18px',
-              border: '1px solid var(--border-subtle)',
-              boxShadow: 'var(--shadow-card)',
-              overflow: 'hidden',
-              display: 'flex',
-              flexDirection: 'column',
-              transition: 'all var(--transition-normal)',
-            }}
-            className="hover-lift"
-          >
-            {/* Header */}
-            <div
-              style={{
-                padding: '16px 18px',
-                borderBottom: '1px solid var(--border-subtle)',
-                backgroundColor: 'var(--role-industry-subtle)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <JharkhandLogo mode="navbar" size={28} />
-                <div>
-                  <h4 style={{ fontSize: '13.5px', fontWeight: 800, color: 'var(--text-primary)', margin: 0 }}>
-                    Industry CSR
-                  </h4>
-                  <p style={{ fontSize: '11px', color: 'var(--text-muted)', margin: 0 }}>
-                    Collaboration Opportunities
-                  </p>
-                </div>
-              </div>
-              <span
-                style={{
-                  fontSize: '10px',
-                  fontWeight: 800,
-                  backgroundColor: 'var(--role-industry)',
-                  color: '#ffffff',
-                  padding: '2px 8px',
-                  borderRadius: '999px',
-                }}
-              >
-                INDUSTRY
-              </span>
-            </div>
-
-            {/* Industry Content Preview */}
-            <div style={{ padding: '16px 18px', flex: 1, display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              {/* Filter preview */}
-              <div style={{ display: 'flex', gap: '6px', fontSize: '10px' }}>
-                <span style={{ padding: '3px 8px', borderRadius: '4px', backgroundColor: 'var(--bg-subtle)', border: '1px solid var(--border-subtle)', color: 'var(--text-secondary)' }}>
-                  All Sectors
-                </span>
-                <span style={{ padding: '3px 8px', borderRadius: '4px', backgroundColor: 'var(--bg-subtle)', border: '1px solid var(--border-subtle)', color: 'var(--text-secondary)' }}>
-                  All Districts
-                </span>
-              </div>
-
-              {/* Opportunity 1 */}
-              <div
-                style={{
-                  padding: '10px',
-                  borderRadius: '8px',
-                  border: '1px solid var(--border-subtle)',
-                  backgroundColor: 'var(--bg-subtle)',
-                }}
-              >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                  <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-primary)' }}>
-                    Solar Street Lighting & Microgrids
-                  </span>
-                  <span style={{ fontSize: '9px', fontWeight: 700, color: 'var(--status-high)', backgroundColor: 'var(--status-high-subtle)', padding: '1px 5px', borderRadius: '4px' }}>
-                    High
-                  </span>
-                </div>
-                <div style={{ fontSize: '10px', color: 'var(--text-muted)', margin: '3px 0' }}>
-                  Dhanbad • Energy & Power
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '6px' }}>
-                  <span style={{ fontSize: '10.5px', fontWeight: 700, color: 'var(--jharkhand-green)' }}>
-                    ₹18,00,000 CSR
-                  </span>
-                  <button
-                    onClick={() => onSelectRole('industry')}
-                    style={{
-                      fontSize: '10px',
-                      fontWeight: 700,
-                      backgroundColor: 'var(--primary)',
-                      color: '#ffffff',
-                      border: 'none',
-                      padding: '4px 8px',
-                      borderRadius: '4px',
-                      cursor: 'pointer',
-                    }}
-                  >
-                    View & Connect
-                  </button>
-                </div>
-              </div>
-
-              {/* Opportunity 2 */}
-              <div
-                style={{
-                  padding: '8px 10px',
-                  borderRadius: '8px',
-                  border: '1px solid var(--border-subtle)',
-                  backgroundColor: 'var(--bg-subtle)',
-                }}
-              >
-                <div style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-primary)' }}>
-                  Forest Lac Cold Chain Preservation
-                </div>
-                <div style={{ fontSize: '10px', color: 'var(--text-muted)' }}>Gumla • Agritech</div>
-              </div>
-            </div>
-
-            {/* Launch Button */}
-            <div style={{ padding: '12px 18px', borderTop: '1px solid var(--border-subtle)' }}>
-              <button
-                onClick={() => onSelectRole('industry')}
-                style={{
-                  width: '100%',
-                  padding: '10px',
-                  borderRadius: '8px',
-                  backgroundColor: 'var(--role-industry)',
-                  color: '#ffffff',
-                  fontWeight: 700,
-                  fontSize: '13px',
-                  border: 'none',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '6px',
-                }}
-              >
-                <span>Launch Industry CSR Hub</span>
-                <ArrowRight size={14} />
-              </button>
-            </div>
-          </div>
-        </div>
+        <LivePortalEcosystem />
       </section>
 
       {/* 4. TRIBAL HERITAGE & CITIZEN ENGAGEMENT BANNER */}

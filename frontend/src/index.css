@@ -777,6 +777,464 @@ body {
   }
 }
 
+/* Reference hero text layout. Keep this scoped so the navbar and lower sections stay unchanged. */
+.landing-masthead {
+  position: relative !important;
+  min-height: calc(100vh - 76px) !important;
+  margin-top: 76px !important;
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+.reference-hero-copy {
+  position: relative;
+  z-index: 2;
+  min-height: calc(100vh - 76px);
+  color: #ffffff;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.55);
+}
+
+.reference-hero-topline,
+.reference-hero-slogan,
+.reference-hero-center,
+.reference-hero-features,
+.reference-hero-bottom-left,
+.reference-hero-stats,
+.reference-hero-bottom-right {
+  position: absolute;
+}
+
+.reference-hero-topline {
+  top: 82px;
+  left: 46%;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  line-height: 1.55;
+}
+
+.reference-hero-slogan,
+.reference-hero-handwritten {
+  font-family: 'Caveat', cursive;
+  font-size: clamp(25px, 2.2vw, 38px);
+  font-weight: 700;
+  line-height: 0.98;
+}
+
+.reference-hero-slogan {
+  top: 30px;
+  right: 5%;
+  text-align: right;
+  transform: rotate(-5deg);
+}
+
+.reference-hero-center {
+  top: 22%;
+  left: 59%;
+  text-align: center;
+  transform: translateX(-50%);
+}
+
+.reference-hero-center div {
+  font-family: Georgia, serif;
+  font-size: clamp(22px, 2.1vw, 38px);
+  font-weight: 700;
+}
+
+.reference-hero-center strong {
+  display: block;
+  color: #e8f4d5;
+  font-size: clamp(38px, 4.4vw, 76px);
+  letter-spacing: 0.06em;
+  line-height: 0.95;
+}
+
+.reference-hero-center small {
+  display: block;
+  margin-top: 12px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+}
+
+.reference-hero-features {
+  top: 40%;
+  right: 5.5%;
+  display: grid;
+  gap: 18px;
+}
+
+.reference-hero-features div {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.reference-hero-features span {
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.reference-hero-bottom-left {
+  bottom: 105px;
+  left: 4%;
+}
+
+.reference-hero-bottom-left .reference-hero-handwritten {
+  margin-bottom: 25px;
+  font-size: clamp(22px, 1.8vw, 30px);
+  transform: rotate(-5deg);
+}
+
+.reference-hero-bottom-left h1 {
+  margin: 0;
+  padding-left: 16px;
+  border-left: 3px solid #1687ff;
+  color: #ffffff;
+  font-size: clamp(32px, 3vw, 54px);
+  line-height: 1.03;
+}
+
+.reference-hero-bottom-left p {
+  margin: 12px 0 20px 18px;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.reference-hero-actions {
+  display: flex;
+  gap: 14px;
+  margin-left: 18px;
+}
+
+.reference-hero-actions button {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 27px;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 22px;
+  color: #ffffff;
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+}
+
+.reference-hero-actions button:first-child {
+  border-color: #1687ff;
+  background: #087cf0;
+}
+
+.reference-hero-stats {
+  right: 31%;
+  bottom: 27px;
+  display: flex;
+  gap: 22px;
+}
+
+.reference-hero-stats div {
+  min-width: 92px;
+  padding-left: 18px;
+  border-left: 1px solid rgba(255, 255, 255, 0.55);
+}
+
+.reference-hero-stats strong,
+.reference-hero-stats span {
+  display: block;
+  color: #ffffff;
+}
+
+.reference-hero-stats strong {
+  font-size: 22px;
+}
+
+.reference-hero-stats span {
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.reference-hero-bottom-right {
+  right: 4%;
+  bottom: 25px;
+  text-align: right;
+}
+
+.reference-hero-bottom-right .reference-hero-handwritten {
+  margin-bottom: 17px;
+  font-size: 26px;
+  transform: rotate(-5deg);
+}
+
+.reference-hero-bottom-right > div:last-child {
+  font-size: 9px;
+  letter-spacing: 0.24em;
+}
+
+.landing-mast-grid {
+  display: none !important;
+}
+
+@media (max-width: 899px) {
+  .landing-masthead,
+  .reference-hero-copy {
+    min-height: 760px !important;
+  }
+
+  .landing-masthead {
+    margin-top: 0 !important;
+  }
+
+  .reference-hero-topline {
+    top: 28px;
+    left: 7%;
+    font-size: 11px;
+  }
+
+  .reference-hero-slogan {
+    top: 25px;
+    right: 7%;
+    font-size: 23px;
+  }
+
+  .reference-hero-center {
+    top: 20%;
+    left: 50%;
+  }
+
+  .reference-hero-features {
+    top: 42%;
+    right: 6%;
+    gap: 12px;
+  }
+
+  .reference-hero-features span {
+    font-size: 9px;
+  }
+
+  .reference-hero-bottom-left {
+    bottom: 115px;
+    left: 6%;
+  }
+
+  .reference-hero-bottom-left h1 {
+    font-size: 29px;
+  }
+
+  .reference-hero-bottom-left p {
+    font-size: 11px;
+  }
+
+  .reference-hero-actions {
+    gap: 8px;
+    margin-left: 12px;
+  }
+
+  .reference-hero-actions button {
+    padding: 9px 13px;
+    font-size: 11px;
+  }
+
+  .reference-hero-stats {
+    right: 5%;
+    bottom: 25px;
+    gap: 4px;
+  }
+
+  .reference-hero-stats div {
+    min-width: 66px;
+    padding-left: 7px;
+  }
+
+  .reference-hero-stats strong {
+    font-size: 15px;
+  }
+
+  .reference-hero-stats span {
+    font-size: 8px;
+  }
+
+  .reference-hero-bottom-right {
+    display: none;
+  }
+}
+
+/* Responsive glass navbar. */
+.landing-navbar {
+  width: 100%;
+  min-width: 0;
+}
+
+.landing-navbar > div {
+  min-width: 0;
+}
+
+.landing-navbar > div > div:first-child {
+  min-width: 0;
+}
+
+.landing-navbar > div > div:first-child > div {
+  min-width: 0;
+}
+
+@media (max-width: 1199px) {
+  .landing-navbar > div {
+    gap: 10px !important;
+    padding-inline: 18px !important;
+  }
+
+  .landing-navbar > div > div:first-child {
+    gap: 9px !important;
+  }
+
+  .landing-navbar > div > div:first-child span:first-child {
+    font-size: 13px !important;
+  }
+
+  .landing-navbar > div > div:first-child span:last-child {
+    font-size: 10px !important;
+  }
+
+  .landing-nav-links {
+    gap: 12px !important;
+  }
+
+  .landing-navbar > div > div:last-child {
+    gap: 6px !important;
+  }
+}
+
+@media (max-width: 899px) {
+  .landing-navbar {
+    position: sticky !important;
+    top: 0;
+    background: rgba(7, 25, 42, 0.9) !important;
+    border-bottom-color: rgba(255, 255, 255, 0.2) !important;
+  }
+
+  .landing-navbar > div {
+    height: 68px !important;
+    padding: 0 12px !important;
+    gap: 8px !important;
+  }
+
+  .landing-navbar > div > div:first-child {
+    flex: 1 1 auto;
+    gap: 8px !important;
+  }
+
+  .landing-navbar > div > div:first-child > div {
+    overflow: hidden;
+  }
+
+  .landing-navbar > div > div:first-child span:first-child {
+    display: block;
+    overflow: hidden;
+    font-size: 12px !important;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .landing-navbar > div > div:first-child span:nth-child(2),
+  .landing-navbar > div > div:first-child span:last-child {
+    display: none;
+  }
+
+  .landing-nav-links {
+    display: none !important;
+  }
+
+  .landing-navbar > div > div:last-child {
+    flex: 0 0 auto;
+    gap: 5px !important;
+  }
+
+  .landing-navbar > div > div:last-child > button:first-child {
+    width: 36px;
+    height: 36px;
+    justify-content: center;
+    padding: 0 !important;
+  }
+
+  .landing-navbar > div > div:last-child > button:first-child span,
+  .landing-navbar > div > div:last-child > button:first-child kbd {
+    display: none;
+  }
+
+  .landing-role-switcher > button {
+    width: 36px;
+    height: 36px;
+    justify-content: center;
+    padding: 0 !important;
+  }
+
+  .landing-role-switcher > button span {
+    display: none;
+  }
+
+  .landing-role-switcher > button svg:last-child {
+    display: none;
+  }
+
+  .landing-navbar .landing-sign-in {
+    display: inline-flex !important;
+    padding: 7px 8px !important;
+    font-size: 11px !important;
+  }
+
+  .landing-navbar .landing-get-started {
+    padding: 8px 10px !important;
+    font-size: 11px !important;
+  }
+
+  .landing-navbar .landing-get-started svg {
+    width: 13px;
+  }
+}
+
+@media (max-width: 560px) {
+  .landing-navbar > div {
+    padding-inline: 9px !important;
+  }
+
+  .landing-navbar > div > div:first-child > svg,
+  .landing-navbar > div > div:first-child img {
+    width: 34px !important;
+    height: 34px !important;
+  }
+
+  .landing-navbar > div > div:first-child span:first-child {
+    max-width: 145px;
+    font-size: 11px !important;
+  }
+
+  .landing-navbar .landing-sign-in {
+    display: none !important;
+  }
+
+  .landing-navbar .landing-get-started span {
+    display: none;
+  }
+
+  .landing-navbar .landing-get-started {
+    width: 34px;
+    height: 34px;
+    justify-content: center;
+    padding: 0 !important;
+  }
+}
+
+/* Translucent backdrop for the navbar over the hero artwork. */
+.landing-navbar {
+  background: rgba(7, 25, 42, 0.2) !important;
+  border-bottom-color: rgba(255, 255, 255, 0.18) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(125%);
+  backdrop-filter: blur(18px) saturate(125%);
+}
+
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
