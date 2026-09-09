@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ArrowRight, Building2, Check, Eye, EyeOff, LockKeyhole, Mail, X } from 'lucide-react';
 import JharkhandLogo from '../common/JharkhandLogo';
 
-export default function IndustryCsrLogin({ onClose, onLogin }) {
+export default function IndustryCsrLogin({ onClose, onLogin, onSwitchMode }) {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(true);
 
@@ -21,7 +21,7 @@ export default function IndustryCsrLogin({ onClose, onLogin }) {
           <div className="role-login-divider"><span>OR</span></div>
           <button className="role-login-alt" type="button"><Building2 size={15} /> Login with Corporate SSO</button>
         </form>
-        <p className="role-login-footer">New partner? <strong>Register as Industry Partner</strong></p>
+        <p className="role-login-footer">New partner? <strong onClick={() => onSwitchMode?.('register')} style={{ cursor: 'pointer' }}>Register as Industry Partner</strong></p>
       </section>
     </div>
   );

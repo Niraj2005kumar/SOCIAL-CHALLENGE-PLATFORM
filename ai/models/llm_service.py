@@ -41,7 +41,7 @@ def chatbot_reply(user_message: str, conversation_history: str = "") -> str:
 (like flood, education, water, healthcare issues) to a government platform.
 Ask ONE clarifying question at a time if details are missing (location, affected people, description).
 Keep replies short (2-3 sentences max) and friendly. Reply in the same language style the user used.
-Do not use markdown formatting.
+Do not use markdown formatting. Always complete your sentence fully.
 
 Previous conversation:
 {conversation_history}
@@ -52,8 +52,68 @@ Assistant:"""
     try:
         response = model.generate_content(
             prompt,
-            generation_config={"max_output_tokens": 200}
+            generation_config={"max_output_tokens": 400}
         )
+        return clean_markdown(response.text)
+    except Exception as e:
+        print(f"ERROR in chatbot_reply: {e}")
+        return "Sorry, main abhi jawab nahi de pa raha. Thodi der baad try karo."
+
+def chatbot_reply(user_message: str, conversation_history: str = "") -> str:
+    platform_context = """
+PLATFORM KNOWLEDGE (use this to answer accurately):
+
+This is the "Societal Innovation Collaboration Portal" - Government of Jharkhand, 
+Department of Higher & Technical Education.
+
+WHAT IT DOES: Citizens report local problems (flood, education, water, healthcare, 
+agriculture, disaster management etc). AI analyzes the problem, then it gets matched 
+to the right university, which forms a student+faculty team to build a solution, 
+with industry partners helping with funding/technology.
+
+4 USER ROLES (each has separate login/register):
+1. Citizen - reports problems, tracks status on "My Challenges" dashboard
+2. Government Admin - reviews/validates challenges, monitors statewide via dashboard
+3. University - reviews assigned challenges, forms teams, tracks milestones
+4. Industry Partner - views collaboration opportunities, offers funding/mentorship/tech
+
+HOW TO REGISTER: Click "Get Started" or "Login" on the top navbar, select your role 
+(Citizen/Government/University/Industry), then fill the registration form with name, 
+email, and password.
+
+HOW TO SUBMIT A PROBLEM (for citizens): After logging in, go to "Submit Challenge", 
+fill in Title, Description, District/Block/Village, optionally upload a photo or use 
+voice input. Submit - AI automatically analyzes it.
+
+WHAT AI DOES AUTOMATICALLY: Categorizes the problem (Flood/Education/Water/etc), 
+sets priority (Low/Medium/High/Critical), detects duplicates, matches the best 
+university based on expertise, estimates severity, checks for missing details, 
+detects spam, matches existing government schemes, detects emotional urgency, 
+predicts risk based on district history, and suggests a team composition.
+
+STATUS TRACKING: Submitted -> Under Review -> Matched -> Project Active -> Pilot -> Resolved/Deployed
+
+If a user asks something unrelated to this platform, politely redirect them back 
+to how you can help with the platform.
+"""
+
+    prompt = f"""{platform_context}
+
+You are a helpful assistant guiding users of this platform. Answer based on the 
+platform knowledge above. If details are missing for a problem report (location, 
+affected people, description), ask ONE clarifying question at a time.
+Keep replies short (2-4 sentences max) and friendly. Reply in the same language 
+style the user used (Hindi/English/Hinglish). Do not use markdown formatting. 
+Always complete your sentence fully.
+
+Previous conversation:
+{conversation_history}
+
+User: {user_message}
+Assistant:"""
+
+    try:
+        response = model.generate_content(prompt)
         return clean_markdown(response.text)
     except Exception as e:
         print(f"ERROR in chatbot_reply: {e}")

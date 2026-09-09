@@ -28,7 +28,7 @@ import LivePortalEcosystem from './LivePortalEcosystem';
 import JharkhandLogo from '../common/JharkhandLogo';
 import { JHARKHAND_DISTRICTS, PLATFORM_STATS, MOCK_CHALLENGES } from '../../data/mockData';
 
-export default function LandingPage({ onSelectRole, onOpenSearch, showToast }) {
+export default function LandingPage({ onSelectRole, onOpenSearch, showToast, onOpenAuth }) {
   const [activeStep, setActiveStep] = useState(1);
   const [hoveredDistrict, setHoveredDistrict] = useState(null);
   const [counts, setCounts] = useState({
@@ -427,7 +427,7 @@ export default function LandingPage({ onSelectRole, onOpenSearch, showToast }) {
 
               {/* Government */}
               <div
-                onClick={() => onSelectRole('admin')}
+                onClick={() => onOpenAuth ? onOpenAuth('admin', 'login') : onSelectRole('admin')}
                 style={{
                   padding: '12px 14px',
                   borderRadius: '12px',
@@ -468,7 +468,7 @@ export default function LandingPage({ onSelectRole, onOpenSearch, showToast }) {
 
               {/* Universities */}
               <div
-                onClick={() => onSelectRole('university')}
+                onClick={() => onOpenAuth ? onOpenAuth('university', 'login') : onSelectRole('university')}
                 style={{
                   padding: '12px 14px',
                   borderRadius: '12px',
@@ -509,7 +509,7 @@ export default function LandingPage({ onSelectRole, onOpenSearch, showToast }) {
 
               {/* Industry */}
               <div
-                onClick={() => onSelectRole('industry')}
+                onClick={() => onOpenAuth ? onOpenAuth('industry', 'login') : onSelectRole('industry')}
                 style={{
                   padding: '12px 14px',
                   borderRadius: '12px',

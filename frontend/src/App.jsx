@@ -7,7 +7,9 @@ import CitizenLogin from './components/auth/CitizenLogin';
 import CitizenRegister from './components/auth/CitizenRegister';
 import GovernmentAdminLogin from './components/auth/GovernmentAdminLogin';
 import UniversityHubLogin from './components/auth/UniversityHubLogin';
+import UniversityRegister from './components/auth/UniversityRegister';
 import IndustryCsrLogin from './components/auth/IndustryCsrLogin';
+import IndustryRegister from './components/auth/IndustryRegister';
 import LandingPage from './components/landing/LandingPage';
 import DashboardLayout from './components/dashboard/DashboardLayout';
 import CitizenDashboard from './components/dashboard/CitizenDashboard';
@@ -27,11 +29,108 @@ export default function App() {
   const [authMode, setAuthMode] = useState('login');
   const [toast, setToast] = useState({ message: '', type: 'info' });
 
+  const pathsByRole = {
+    landing: '/',
+    citizen: '/citizen',
+    admin: '/admin',
+    university: '/university',
+    industry: '/industry',
+  };
+
+  const authPathsByRole = {
+    citizen: authMode === 'register' ? '/CitizenRegister' : '/CitizenLogin',
+    admin: '/GovernmentAdminLogin',
+    university: '/UniversityHubLogin',
+    industry: '/IndustryCsrLogin',
+  };
+
+  const syncPath = (role, mode = 'login', modal = false) => {
+    const nextPath = modal ? authPathsByRole[role] || '/CitizenLogin' : pathsByRole[role] || '/';
+    if (window.history && window.history.pushState) {
+      window.history.pushState({}, '', nextPath);
+    }
+  };
+
+  const handleSelectRole = (role) => {
+    setCurrentRole(role);
+    setIsAuthOpen(false);
+    syncPath(role, 'login', false);
+  };
+
+  const handleOpenAuth = (role = 'citizen', mode = 'login') => {
+    setAuthRole(role);
+    setAuthMode(mode);
+    setIsAuthOpen(true);
+    setCurrentRole('landing');
+    syncPath(role, mode, true);
+  };
+
   // Update theme on html root
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('jharkhand-theme', theme);
   }, [theme]);
+
+  useEffect(() => {
+    const currentPath = window.location.pathname.toLowerCase();
+    const routeMap = {
+      '/': () => {
+        setCurrentRole('landing');
+        setIsAuthOpen(false);
+      },
+      '/citizen': () => {
+        setCurrentRole('citizen');
+        setIsAuthOpen(false);
+      },
+      '/admin': () => {
+        setCurrentRole('admin');
+        setIsAuthOpen(false);
+      },
+      '/university': () => {
+        setCurrentRole('university');
+        setIsAuthOpen(false);
+      },
+      '/industry': () => {
+        setCurrentRole('industry');
+        setIsAuthOpen(false);
+      },
+      '/citizenlogin': () => {
+        setAuthRole('citizen');
+        setAuthMode('login');
+        setCurrentRole('landing');
+        setIsAuthOpen(true);
+      },
+      '/governmentadminlogin': () => {
+        setAuthRole('admin');
+        setAuthMode('login');
+        setCurrentRole('landing');
+        setIsAuthOpen(true);
+      },
+      '/universityhublogin': () => {
+        setAuthRole('university');
+        setAuthMode('login');
+        setCurrentRole('landing');
+        setIsAuthOpen(true);
+      },
+      '/industrycsrlogin': () => {
+        setAuthRole('industry');
+        setAuthMode('login');
+        setCurrentRole('landing');
+        setIsAuthOpen(true);
+      },
+      '/citizenregister': () => {
+        setAuthRole('citizen');
+        setAuthMode('register');
+        setCurrentRole('landing');
+        setIsAuthOpen(true);
+      },
+    };
+
+    const handler = routeMap[currentPath];
+    if (handler) {
+      handler();
+    }
+  }, []);
 
   const toggleTheme = () => {
     setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
@@ -48,8 +147,8 @@ export default function App() {
   const LoginComponent = {
     citizen: authMode === 'register' ? CitizenRegister : CitizenLogin,
     admin: GovernmentAdminLogin,
-    university: UniversityHubLogin,
-    industry: IndustryCsrLogin,
+    university: authMode === 'register' ? UniversityRegister : UniversityHubLogin,
+    industry: authMode === 'register' ? IndustryRegister : IndustryCsrLogin,
   }[authRole] || CitizenLogin;
 
   // Keyboard shortcut listener for Cmd+K / Ctrl+K
@@ -82,12 +181,19 @@ export default function App() {
 
       {isAuthOpen && (
         <LoginComponent
-          onClose={() => setIsAuthOpen(false)}
-          onSwitchMode={(mode) => setAuthMode(mode)}
+          onClose={() => {
+            setIsAuthOpen(false);
+            syncPath(currentRole === 'landing' ? 'citizen' : currentRole, authMode, false);
+          }}
+          onSwitchMode={(mode) => {
+            setAuthMode(mode);
+            syncPath(authRole, mode, true);
+          }}
           onLogin={(roleId, roleName) => {
             setCurrentRole(roleId);
             setIsAuthOpen(false);
             setAuthMode('login');
+            syncPath(roleId, 'login', false);
             showToast(`Signed in successfully as ${roleName}`, 'success');
           }}
         />
@@ -99,21 +205,18 @@ export default function App() {
           {/* Public Landing Navbar */}
           <Navbar
             currentRole={currentRole}
-            onSelectRole={setCurrentRole}
+            onSelectRole={handleSelectRole}
             theme={theme}
             onToggleTheme={toggleTheme}
             onOpenSearch={() => setIsSearchOpen(true)}
-            onOpenAuth={(role = 'citizen') => {
-              setAuthRole(role);
-              setAuthMode('login');
-              setIsAuthOpen(true);
-            }}
+            onOpenAuth={(role = 'citizen', mode = 'login') => handleOpenAuth(role, mode)}
           />
 
           {/* Public Landing View */}
           <main style={{ flex: 1 }}>
             <LandingPage
-              onSelectRole={setCurrentRole}
+              onSelectRole={handleSelectRole}
+              onOpenAuth={(role = 'citizen', mode = 'login') => handleOpenAuth(role, mode)}
               onOpenSearch={() => setIsSearchOpen(true)}
               showToast={showToast}
             />
@@ -144,7 +247,7 @@ export default function App() {
               ? 'Birla Institute of Technology Mesra • Department of Chemical & Environmental Engineering'
               : 'Corporate Social Responsibility & Technological Scalability'
           }
-          onSelectRole={setCurrentRole}
+          onSelectRole={handleSelectRole}
           onOpenSearch={() => setIsSearchOpen(true)}
           theme={theme}
           onToggleTheme={toggleTheme}

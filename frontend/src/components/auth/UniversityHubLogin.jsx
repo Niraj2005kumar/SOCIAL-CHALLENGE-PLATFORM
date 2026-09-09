@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ArrowRight, Check, Eye, EyeOff, GraduationCap, LockKeyhole, Mail, X } from 'lucide-react';
 import JharkhandLogo from '../common/JharkhandLogo';
 
-export default function UniversityHubLogin({ onClose, onLogin }) {
+export default function UniversityHubLogin({ onClose, onLogin, onSwitchMode }) {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(true);
 
@@ -21,7 +21,7 @@ export default function UniversityHubLogin({ onClose, onLogin }) {
           <div className="role-login-divider"><span>OR</span></div>
           <button className="role-login-alt" type="button"><GraduationCap size={15} /> Login with Academic SSO</button>
         </form>
-        <p className="role-login-footer">New university? <strong>Register Your Institution</strong></p>
+        <p className="role-login-footer">New university? <strong onClick={() => onSwitchMode?.('register')} style={{ cursor: 'pointer' }}>Register Your Institution</strong></p>
       </section>
     </div>
   );
