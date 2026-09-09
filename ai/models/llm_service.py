@@ -50,12 +50,14 @@ User: {user_message}
 Assistant:"""
 
     try:
-        response = model.generate_content(prompt)
+        response = model.generate_content(
+            prompt,
+            generation_config={"max_output_tokens": 200}
+        )
         return clean_markdown(response.text)
     except Exception as e:
         print(f"ERROR in chatbot_reply: {e}")
         return "Sorry, main abhi jawab nahi de pa raha. Thodi der baad try karo."
-
 
 def generate_impact_report(challenge_data: dict) -> str:
     prompt = f"""Generate a short professional impact report paragraph (3-4 sentences) based on this data.

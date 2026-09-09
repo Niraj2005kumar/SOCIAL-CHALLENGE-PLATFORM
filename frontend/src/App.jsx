@@ -4,6 +4,7 @@ import Footer from './components/common/Footer';
 import CmdKSearch from './components/common/CmdKSearch';
 import Toast from './components/common/Toast';
 import CitizenLogin from './components/auth/CitizenLogin';
+import CitizenRegister from './components/auth/CitizenRegister';
 import GovernmentAdminLogin from './components/auth/GovernmentAdminLogin';
 import UniversityHubLogin from './components/auth/UniversityHubLogin';
 import IndustryCsrLogin from './components/auth/IndustryCsrLogin';
@@ -13,6 +14,7 @@ import CitizenDashboard from './components/dashboard/CitizenDashboard';
 import AdminDashboard from './components/dashboard/AdminDashboard';
 import UniversityDashboard from './components/dashboard/UniversityDashboard';
 import IndustryDashboard from './components/dashboard/IndustryDashboard';
+import Chatbot from './components/Chatbot';
 
 export default function App() {
   const [currentRole, setCurrentRole] = useState('landing');
@@ -22,6 +24,7 @@ export default function App() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [authRole, setAuthRole] = useState('citizen');
+  const [authMode, setAuthMode] = useState('login');
   const [toast, setToast] = useState({ message: '', type: 'info' });
 
   // Update theme on html root
@@ -43,7 +46,7 @@ export default function App() {
   };
 
   const LoginComponent = {
-    citizen: CitizenLogin,
+    citizen: authMode === 'register' ? CitizenRegister : CitizenLogin,
     admin: GovernmentAdminLogin,
     university: UniversityHubLogin,
     industry: IndustryCsrLogin,
@@ -80,9 +83,11 @@ export default function App() {
       {isAuthOpen && (
         <LoginComponent
           onClose={() => setIsAuthOpen(false)}
+          onSwitchMode={(mode) => setAuthMode(mode)}
           onLogin={(roleId, roleName) => {
             setCurrentRole(roleId);
             setIsAuthOpen(false);
+            setAuthMode('login');
             showToast(`Signed in successfully as ${roleName}`, 'success');
           }}
         />
@@ -100,6 +105,7 @@ export default function App() {
             onOpenSearch={() => setIsSearchOpen(true)}
             onOpenAuth={(role = 'citizen') => {
               setAuthRole(role);
+              setAuthMode('login');
               setIsAuthOpen(true);
             }}
           />
@@ -150,6 +156,8 @@ export default function App() {
           {currentRole === 'industry' && <IndustryDashboard showToast={showToast} />}
         </DashboardLayout>
       )}
+      {/* Floating AI Help Assistant — visible on every page/role */}
+      <Chatbot />
     </div>
   );
 }

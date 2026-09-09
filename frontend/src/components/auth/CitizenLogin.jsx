@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ArrowRight, Check, Eye, EyeOff, LockKeyhole, Phone, UserCheck, X } from 'lucide-react';
 import JharkhandLogo from '../common/JharkhandLogo';
 
-export default function CitizenLogin({ onClose, onLogin }) {
+export default function CitizenLogin({ onClose, onLogin, onSwitchMode }) {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(true);
 
@@ -21,7 +21,7 @@ export default function CitizenLogin({ onClose, onLogin }) {
           <div className="role-login-divider"><span>OR</span></div>
           <button className="role-login-alt" type="button"><Phone size={15} /> Login with OTP</button>
         </form>
-        <p className="role-login-footer">Don't have an account? <strong>Register as Citizen</strong></p>
+        <p className="role-login-footer">Don't have an account? <strong onClick={() => onSwitchMode?.('register')} style={{ cursor: 'pointer' }}>Register as Citizen</strong></p>
       </section>
     </div>
   );

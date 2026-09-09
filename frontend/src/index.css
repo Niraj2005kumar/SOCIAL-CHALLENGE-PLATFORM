@@ -1610,6 +1610,52 @@ body {
   color: var(--login-accent);
 }
 
+.role-register-form {
+  gap: 12px;
+}
+
+.role-register-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.role-register-grid label {
+  display: block;
+}
+
+.role-register-span-2 {
+  grid-column: 1 / -1;
+}
+
+.role-register-checkbox {
+  display: flex !important;
+  align-items: flex-start;
+  gap: 7px;
+  margin: 2px 0 0 !important;
+  color: #475569;
+  font-size: 9px !important;
+  line-height: 1.4;
+}
+
+.role-register-checkbox input {
+  position: absolute;
+  opacity: 0;
+}
+
+.role-register-checkbox span {
+  display: grid;
+  width: 12px;
+  height: 12px;
+  margin-top: 1px;
+  place-items: center;
+  border: 1px solid #94a3b8;
+  border-radius: 3px;
+  color: #ffffff;
+  background: var(--login-accent);
+  flex-shrink: 0;
+}
+
 @media (max-width: 560px) {
   .role-login-overlay {
     align-items: flex-start;
@@ -1624,6 +1670,10 @@ body {
 
   .role-login-switcher button span {
     display: none;
+  }
+
+  .role-register-grid {
+    grid-template-columns: 1fr;
   }
 
   .role-login-heading h2 {

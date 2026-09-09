@@ -1,4 +1,5 @@
 from fastapi import FastAPI, File, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Optional
 
@@ -19,6 +20,14 @@ from services.similar_cases import find_similar_solved_cases
 from models.llm_service import chatbot_reply, generate_impact_report, analyze_image
 
 app = FastAPI(title="Societal Innovation Collaboration Portal - AI Service")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 class ChallengeInput(BaseModel):
