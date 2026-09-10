@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Search, Moon, Sun, ChevronDown, UserCheck, Shield, GraduationCap, Building2, Globe, LogIn, ArrowRight } from 'lucide-react';
+import React from 'react';
+import { Search, Moon, Sun, ArrowRight } from 'lucide-react';
 import JharkhandLogo from './JharkhandLogo';
 
 export default function Navbar({
@@ -10,17 +10,13 @@ export default function Navbar({
   onOpenSearch,
   onOpenAuth,
 }) {
-  const [roleDropdownOpen, setRoleDropdownOpen] = useState(false);
-
-  const roles = [
-    { id: 'landing', label: 'Public Portal', icon: Globe, color: 'text-slate-600', badge: 'Public' },
-    { id: 'citizen', label: 'Citizen Dashboard', icon: UserCheck, color: 'text-emerald-500', badge: 'Green' },
-    { id: 'admin', label: 'Government Admin', icon: Shield, color: 'text-blue-500', badge: 'Blue' },
-    { id: 'university', label: 'University Hub', icon: GraduationCap, color: 'text-purple-500', badge: 'Purple' },
-    { id: 'industry', label: 'Industry CSR', icon: Building2, color: 'text-amber-500', badge: 'Orange' },
-  ];
-
-  const currentRoleObj = roles.find(r => r.id === currentRole) || roles[0];
+  const currentRoleLabel = {
+    landing: 'Citizen Login',
+    citizen: 'Citizen Login',
+    admin: 'Government Login',
+    university: 'University Login',
+    industry: 'Industry Login',
+  }[currentRole] || 'Citizen Login';
 
   return (
     <header
@@ -176,81 +172,32 @@ export default function Navbar({
             </kbd>
           </button>
 
-          {/* Role Switcher Dropdown (Allows seamless 1-click preview of all 4 roles) */}
-          <div className="landing-role-switcher" style={{ position: 'relative' }}>
-            <button
-              onClick={() => setRoleDropdownOpen(!roleDropdownOpen)}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '7px',
-                padding: '6px 12px',
-                backgroundColor: 'var(--bg-card)',
-                border: '1px solid var(--border-strong)',
-                borderRadius: 'var(--radius-sm)',
-                fontSize: '12.5px',
-                fontWeight: 600,
-                color: 'var(--text-primary)',
-                cursor: 'pointer',
-              }}
-              className="hover-lift"
-              title="Switch role view or dashboard"
-            >
-              <currentRoleObj.icon size={15} style={{ color: 'var(--primary)' }} />
-              <span>{currentRoleObj.label}</span>
-              <ChevronDown size={13} style={{ color: 'var(--text-muted)' }} />
-            </button>
-
-            {/* Dropdown Menu */}
-            {roleDropdownOpen && (
-              <div
-                style={{
-                  position: 'absolute',
-                  top: '110%',
-                  right: 0,
-                  width: '240px',
-                  backgroundColor: 'var(--bg-card)',
-                  borderRadius: 'var(--radius-md)',
-                  border: '1px solid var(--border-subtle)',
-                  boxShadow: 'var(--shadow-modal)',
-                  padding: '6px',
-                  zIndex: 100,
-                }}
-              >
-                <div style={{ padding: '6px 10px', fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', color: 'var(--text-muted)' }}>
-                  Switch View / Role Portal
-                </div>
-                {roles.map(r => (
-                  <button
-                    key={r.id}
-                    onClick={() => {
-                      onSelectRole(r.id);
-                      setRoleDropdownOpen(false);
-                    }}
-                    style={{
-                      width: '100%',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '10px',
-                      padding: '8px 10px',
-                      borderRadius: '8px',
-                      border: 'none',
-                      backgroundColor: currentRole === r.id ? 'var(--primary-subtle)' : 'transparent',
-                      color: currentRole === r.id ? 'var(--primary)' : 'var(--text-primary)',
-                      fontWeight: currentRole === r.id ? 700 : 500,
-                      fontSize: '13px',
-                      cursor: 'pointer',
-                      textAlign: 'left',
-                    }}
-                    className="hover:bg-slate-100 dark:hover:bg-slate-800"
-                  >
-                    <r.icon size={16} />
-                    <span>{r.label}</span>
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
+          {/* Department Login Action */}
+          <button
+            onClick={() => {
+              const role = currentRole === 'landing' ? 'citizen' : currentRole;
+              if (onOpenAuth) onOpenAuth(role, 'login');
+              else onSelectRole(role);
+            }}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '7px',
+              padding: '6px 12px',
+              backgroundColor: 'var(--bg-card)',
+              border: '1px solid var(--border-strong)',
+              borderRadius: 'var(--radius-sm)',
+              fontSize: '12.5px',
+              fontWeight: 600,
+              color: 'var(--text-primary)',
+              cursor: 'pointer',
+            }}
+            className="hover-lift"
+            title="Open department login"
+          >
+            <span>{currentRoleLabel}</span>
+            <ArrowRight size={13} style={{ color: 'var(--text-muted)' }} />
+          </button>
 
           {/* Dark / Light Theme Toggle */}
           <button

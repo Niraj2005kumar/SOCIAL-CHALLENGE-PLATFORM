@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import api from '../../services/api';
 import {
   Shield,
   TrendingUp,
@@ -26,6 +27,20 @@ export default function AdminDashboard({ showToast }) {
   const [assignedUni, setAssignedUni] = useState(UNIVERSITIES[0]?.name || 'BIT Mesra');
   const [assignedIndustry, setAssignedIndustry] = useState(INDUSTRY_PARTNERS[0]?.name || 'Tata Steel Foundation');
   const [grantAmount, setGrantAmount] = useState('₹5,00,000');
+  const [stats, setStats] = useState(null);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const { data } = await api.get('/dashboard/stats');
+        setStats(data);
+      } catch (error) {
+        console.warn('Dashboard stats fetch failed; showing fallback metrics.', error);
+      }
+    };
+
+    fetchStats();
+  }, []);
 
   // Filter challenges based on district, status, and search
   const filteredChallenges = MOCK_CHALLENGES.filter((c) => {
@@ -86,7 +101,7 @@ export default function AdminDashboard({ showToast }) {
             </span>
           </div>
           <div style={{ fontSize: '28px', fontWeight: 800, color: 'var(--text-primary)', fontVariantNumeric: 'tabular-nums' }}>
-            1,248
+            {stats?.totalChallenges ? stats.totalChallenges.toLocaleString() : '1,248'}
           </div>
           <p style={{ fontSize: '11.5px', color: 'var(--text-muted)', margin: '4px 0 0' }}>
             Across 24 districts of Jharkhand
@@ -113,7 +128,7 @@ export default function AdminDashboard({ showToast }) {
             </span>
           </div>
           <div style={{ fontSize: '28px', fontWeight: 800, color: 'var(--status-critical)', fontVariantNumeric: 'tabular-nums' }}>
-            320
+            {stats?.statusCounts?.find((s) => s._id === 'Under Review')?.count ?? 320}
           </div>
           <p style={{ fontSize: '11.5px', color: 'var(--text-muted)', margin: '4px 0 0' }}>
             Pending District Collector sign-off
@@ -140,7 +155,7 @@ export default function AdminDashboard({ showToast }) {
             </span>
           </div>
           <div style={{ fontSize: '28px', fontWeight: 800, color: 'var(--role-industry)', fontVariantNumeric: 'tabular-nums' }}>
-            612
+            {stats?.statusCounts?.find((s) => s._id === 'Project Active' || s._id === 'Matched')?.count ?? 612}
           </div>
           <p style={{ fontSize: '11.5px', color: 'var(--text-muted)', margin: '4px 0 0' }}>
             Assigned to University R&D squads
@@ -167,7 +182,7 @@ export default function AdminDashboard({ showToast }) {
             </span>
           </div>
           <div style={{ fontSize: '28px', fontWeight: 800, color: 'var(--role-citizen)', fontVariantNumeric: 'tabular-nums' }}>
-            316
+            {stats?.statusCounts?.find((s) => s._id === 'Resolved')?.count ?? 316}
           </div>
           <p style={{ fontSize: '11.5px', color: 'var(--text-muted)', margin: '4px 0 0' }}>
             Solutions operational in field

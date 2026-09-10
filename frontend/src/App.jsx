@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import api from './services/api';
 import Navbar from './components/common/Navbar';
 import Footer from './components/common/Footer';
 import CmdKSearch from './components/common/CmdKSearch';
@@ -189,12 +190,45 @@ export default function App() {
             setAuthMode(mode);
             syncPath(authRole, mode, true);
           }}
-          onLogin={(roleId, roleName) => {
-            setCurrentRole(roleId);
-            setIsAuthOpen(false);
-            setAuthMode('login');
-            syncPath(roleId, 'login', false);
-            showToast(`Signed in successfully as ${roleName}`, 'success');
+          onLogin={async (roleId, roleName, payload = {}) => {
+            try {
+              const mode = payload.mode || authMode;
+              const requestData = {
+                ...payload,
+                role: payload.role || roleId,
+              };
+
+              if (mode === 'register') {
+                const response = await api.post('/auth/register', requestData);
+                const { token, name, email, role } = response.data;
+                localStorage.setItem('jharkhand-token', token);
+                localStorage.setItem('jharkhand-user', JSON.stringify({ name, email, role: role || roleId }));
+                setCurrentRole(role || roleId);
+                setIsAuthOpen(false);
+                setAuthMode('login');
+                syncPath(role || roleId, 'login', false);
+                showToast(`Account created successfully as ${roleName}`, 'success');
+                return;
+              }
+
+              const loginPayload = {
+                email: payload.email || payload.mobile || payload.username,
+                password: payload.password,
+              };
+
+              const response = await api.post('/auth/login', loginPayload);
+              const { token, name, email, role } = response.data;
+              localStorage.setItem('jharkhand-token', token);
+              localStorage.setItem('jharkhand-user', JSON.stringify({ name, email, role: role || roleId }));
+              setCurrentRole(role || roleId);
+              setIsAuthOpen(false);
+              setAuthMode('login');
+              syncPath(role || roleId, 'login', false);
+              showToast(`Signed in successfully as ${roleName}`, 'success');
+            } catch (error) {
+              const message = error.response?.data?.message || 'Authentication failed. Please try again.';
+              showToast(message, 'warning');
+            }
           }}
         />
       )}

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import api from '../../services/api';
 import {
   Send,
   UploadCloud,
@@ -32,6 +33,7 @@ export default function CitizenDashboard({ showToast }) {
   const [isRecordingVoice, setIsRecordingVoice] = useState(false);
   const [recordingSeconds, setRecordingSeconds] = useState(0);
   const [hasVoiceNote, setHasVoiceNote] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [submissions, setSubmissions] = useState([
     {
       id: 'CH-CIT-01',
@@ -76,6 +78,35 @@ export default function CitizenDashboard({ showToast }) {
       comments: 8,
     }
   ]);
+
+  useEffect(() => {
+    const fetchChallenges = async () => {
+      try {
+        const { data } = await api.get('/challenges');
+        if (Array.isArray(data) && data.length) {
+          const mapped = data.map((item) => ({
+            id: item._id ? `CH-${String(item._id).slice(-6).toUpperCase()}` : `CH-CIT-${submissions.length + 1}`,
+            title: item.title,
+            district: item.location?.district || 'Ranchi',
+            block: item.location?.block || 'Angara',
+            village: item.location?.village || 'Central Hamlet',
+            category: item.category || 'General Civic Need',
+            priority: item.priority || 'Medium',
+            status: item.status || 'Submitted / AI Triaged',
+            stage: item.status === 'Resolved' ? 4 : item.status === 'Project Active' ? 3 : item.status === 'Under Review' ? 2 : 1,
+            date: new Date(item.createdAt || Date.now()).toISOString().split('T')[0],
+            upvotes: 1,
+            comments: 0,
+          }));
+          setSubmissions(mapped);
+        }
+      } catch (error) {
+        console.warn('Challenge fetch failed, falling back to mock data.', error);
+      }
+    };
+
+    fetchChallenges();
+  }, []);
 
   // Voice recording timer simulation
   useEffect(() => {
@@ -152,38 +183,59 @@ export default function CitizenDashboard({ showToast }) {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!title.trim() || !description.trim()) {
       showToast?.('Please provide both title and description for your challenge', 'warning');
       return;
     }
 
-    const newSub = {
-      id: `CH-CIT-0${submissions.length + 1}`,
-      title: title.trim(),
-      district: currentDistrictObj.name,
-      block: selectedBlock,
-      village: village.trim() || 'Central Hamlet',
-      category: aiTriage.category,
-      priority: aiTriage.priority,
-      status: 'Submitted / AI Triaged',
-      stage: 1,
-      date: new Date().toISOString().split('T')[0],
-      upvotes: 1,
-      comments: 0,
-    };
+    try {
+      setIsLoading(true);
+      const payload = {
+        title: title.trim(),
+        description: description.trim(),
+        category: aiTriage.category,
+        priority: aiTriage.priority,
+        location: {
+          district: currentDistrictObj.name,
+          block: selectedBlock,
+          village: village.trim() || 'Central Hamlet',
+        },
+      };
 
-    setSubmissions([newSub, ...submissions]);
-    showToast?.('Challenge submitted to Government & University portal!', 'success');
+      const { data } = await api.post('/challenges', payload);
+      const saved = data.challenge || data;
+      const newSub = {
+        id: saved?._id ? `CH-${String(saved._id).slice(-6).toUpperCase()}` : `CH-CIT-0${submissions.length + 1}`,
+        title: saved?.title || title.trim(),
+        district: saved?.location?.district || currentDistrictObj.name,
+        block: saved?.location?.block || selectedBlock,
+        village: saved?.location?.village || (village.trim() || 'Central Hamlet'),
+        category: saved?.category || aiTriage.category,
+        priority: saved?.priority || aiTriage.priority,
+        status: saved?.status || 'Submitted / AI Triaged',
+        stage: 1,
+        date: new Date(saved?.createdAt || Date.now()).toISOString().split('T')[0],
+        upvotes: 1,
+        comments: 0,
+      };
 
-    // Reset form
-    setTitle('');
-    setDescription('');
-    setVillage('');
-    setUploadedPhotos([]);
-    setHasVoiceNote(false);
-    setActiveTab('my-challenges');
+      setSubmissions((prev) => [newSub, ...prev]);
+      showToast?.('Challenge submitted to Government & University portal!', 'success');
+
+      setTitle('');
+      setDescription('');
+      setVillage('');
+      setUploadedPhotos([]);
+      setHasVoiceNote(false);
+      setActiveTab('my-challenges');
+    } catch (error) {
+      const message = error.response?.data?.message || 'Could not submit challenge. Please try again.';
+      showToast?.(message, 'warning');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -202,6 +254,7 @@ export default function CitizenDashboard({ showToast }) {
       >
         <div style={{ display: 'flex', gap: '8px' }}>
           <button
+            type="button"
             onClick={() => setActiveTab('submit')}
             style={{
               padding: '8px 18px',
@@ -222,6 +275,7 @@ export default function CitizenDashboard({ showToast }) {
           </button>
 
           <button
+            type="button"
             onClick={() => setActiveTab('my-challenges')}
             style={{
               padding: '8px 18px',

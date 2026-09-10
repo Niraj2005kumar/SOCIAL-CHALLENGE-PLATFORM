@@ -18,6 +18,7 @@ export default function CitizenRegister({ onClose, onLogin, onSwitchMode }) {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [agreeTerms, setAgreeTerms] = useState(true);
+  const [form, setForm] = useState({ name: '', phone: '', email: '', village: '', district: '', password: '', confirmPassword: '' });
 
   return (
     <div className="role-login-overlay" onClick={onClose}>
@@ -55,7 +56,18 @@ export default function CitizenRegister({ onClose, onLogin, onSwitchMode }) {
           className="role-login-form role-register-form"
           onSubmit={(event) => {
             event.preventDefault();
-            onLogin('citizen', 'Citizen Registration');
+            if (form.password !== form.confirmPassword) {
+              alert('Passwords do not match');
+              return;
+            }
+            onLogin('citizen', 'Citizen Registration', {
+              name: form.name,
+              email: form.email,
+              password: form.password,
+              district: form.district,
+              role: 'citizen',
+              mode: 'register',
+            });
           }}
         >
           <div className="role-register-grid">
@@ -63,7 +75,7 @@ export default function CitizenRegister({ onClose, onLogin, onSwitchMode }) {
               <span>Full Name</span>
               <div className="role-login-input">
                 <UserRound size={15} />
-                <input type="text" placeholder="Enter full name" required />
+                <input type="text" placeholder="Enter full name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required />
               </div>
             </label>
 
@@ -71,7 +83,7 @@ export default function CitizenRegister({ onClose, onLogin, onSwitchMode }) {
               <span>Mobile Number</span>
               <div className="role-login-input">
                 <Phone size={15} />
-                <input type="tel" placeholder="10-digit mobile" required />
+                <input type="tel" placeholder="10-digit mobile" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} required />
               </div>
             </label>
 
@@ -79,7 +91,7 @@ export default function CitizenRegister({ onClose, onLogin, onSwitchMode }) {
               <span>Email Address</span>
               <div className="role-login-input">
                 <Mail size={15} />
-                <input type="email" placeholder="name@example.com" required />
+                <input type="email" placeholder="name@example.com" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} required />
               </div>
             </label>
 
@@ -87,7 +99,7 @@ export default function CitizenRegister({ onClose, onLogin, onSwitchMode }) {
               <span>Village / Ward</span>
               <div className="role-login-input">
                 <MapPin size={15} />
-                <input type="text" placeholder="eg. Ranchi, Ward-12" required />
+                <input type="text" placeholder="eg. Ranchi, Ward-12" value={form.village} onChange={(e) => setForm({ ...form, village: e.target.value })} required />
               </div>
             </label>
 
@@ -95,7 +107,7 @@ export default function CitizenRegister({ onClose, onLogin, onSwitchMode }) {
               <span>District</span>
               <div className="role-login-input">
                 <MapPin size={15} />
-                <select defaultValue="" required style={{ width: '100%', border: 0, background: 'transparent', outline: 'none', color: '#1e293b', font: 'inherit', fontSize: '10px' }}>
+                <select value={form.district} onChange={(e) => setForm({ ...form, district: e.target.value })} required style={{ width: '100%', border: 0, background: 'transparent', outline: 'none', color: '#1e293b', font: 'inherit', fontSize: '10px' }}>
                   <option value="" disabled>Choose district</option>
                   <option>Ranchi</option>
                   <option>East Singhbhum</option>
@@ -110,7 +122,7 @@ export default function CitizenRegister({ onClose, onLogin, onSwitchMode }) {
               <span>Password</span>
               <div className="role-login-input">
                 <LockKeyhole size={15} />
-                <input type={showPassword ? 'text' : 'password'} placeholder="Create password" required />
+                <input type={showPassword ? 'text' : 'password'} placeholder="Create password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} required />
                 <button type="button" onClick={() => setShowPassword((value) => !value)} aria-label="Toggle password visibility">
                   {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
                 </button>
@@ -121,7 +133,7 @@ export default function CitizenRegister({ onClose, onLogin, onSwitchMode }) {
               <span>Confirm Password</span>
               <div className="role-login-input">
                 <LockKeyhole size={15} />
-                <input type={showConfirmPassword ? 'text' : 'password'} placeholder="Re-enter password" required />
+                <input type={showConfirmPassword ? 'text' : 'password'} placeholder="Re-enter password" value={form.confirmPassword} onChange={(e) => setForm({ ...form, confirmPassword: e.target.value })} required />
                 <button type="button" onClick={() => setShowConfirmPassword((value) => !value)} aria-label="Toggle confirm password visibility">
                   {showConfirmPassword ? <EyeOff size={15} /> : <Eye size={15} />}
                 </button>

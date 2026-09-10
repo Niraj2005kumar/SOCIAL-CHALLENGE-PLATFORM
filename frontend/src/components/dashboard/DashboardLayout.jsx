@@ -543,32 +543,6 @@ export default function DashboardLayout({
               )}
             </div>
 
-            {/* Quick Switch Role Dropdown Button */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <select
-                value={role}
-                onChange={(e) => {
-                  onSelectRole(e.target.value);
-                  showToast?.(`Switched view to ${e.target.value.toUpperCase()} dashboard`, 'info');
-                }}
-                style={{
-                  padding: '6px 10px',
-                  borderRadius: '8px',
-                  border: '1px solid var(--border-strong)',
-                  backgroundColor: 'var(--bg-card)',
-                  color: 'var(--text-primary)',
-                  fontSize: '12px',
-                  fontWeight: 700,
-                  cursor: 'pointer',
-                  outline: 'none',
-                }}
-              >
-                <option value="citizen">Citizen</option>
-                <option value="admin">Gov Admin</option>
-                <option value="university">University</option>
-                <option value="industry">Industry</option>
-              </select>
-            </div>
           </div>
         </header>
 

@@ -19,6 +19,7 @@ export default function IndustryRegister({ onClose, onLogin, onSwitchMode }) {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [agreeTerms, setAgreeTerms] = useState(true);
+  const [form, setForm] = useState({ company: '', contactPerson: '', email: '', phone: '', location: '', focusArea: '', password: '', confirmPassword: '' });
 
   return (
     <div className="role-login-overlay" onClick={onClose}>
@@ -56,7 +57,18 @@ export default function IndustryRegister({ onClose, onLogin, onSwitchMode }) {
           className="role-login-form role-register-form"
           onSubmit={(event) => {
             event.preventDefault();
-            onLogin('industry', 'Industry Partner Registration');
+            if (form.password !== form.confirmPassword) {
+              alert('Passwords do not match');
+              return;
+            }
+            onLogin('industry', 'Industry Partner Registration', {
+              name: form.company,
+              email: form.email,
+              password: form.password,
+              district: form.location,
+              role: 'industry',
+              mode: 'register',
+            });
           }}
         >
           <div className="role-register-grid">
@@ -64,7 +76,7 @@ export default function IndustryRegister({ onClose, onLogin, onSwitchMode }) {
               <span>Company / Organization</span>
               <div className="role-login-input">
                 <Building2 size={15} />
-                <input type="text" placeholder="Company name" required />
+                <input type="text" placeholder="Company name" value={form.company} onChange={(e) => setForm({ ...form, company: e.target.value })} required />
               </div>
             </label>
 
@@ -72,7 +84,7 @@ export default function IndustryRegister({ onClose, onLogin, onSwitchMode }) {
               <span>Contact Person</span>
               <div className="role-login-input">
                 <UserRound size={15} />
-                <input type="text" placeholder="Full name" required />
+                <input type="text" placeholder="Full name" value={form.contactPerson} onChange={(e) => setForm({ ...form, contactPerson: e.target.value })} required />
               </div>
             </label>
 
@@ -80,7 +92,7 @@ export default function IndustryRegister({ onClose, onLogin, onSwitchMode }) {
               <span>Official Email</span>
               <div className="role-login-input">
                 <Mail size={15} />
-                <input type="email" placeholder="name@company.com" required />
+                <input type="email" placeholder="name@company.com" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} required />
               </div>
             </label>
 
@@ -88,7 +100,7 @@ export default function IndustryRegister({ onClose, onLogin, onSwitchMode }) {
               <span>Mobile Number</span>
               <div className="role-login-input">
                 <Phone size={15} />
-                <input type="tel" placeholder="10-digit mobile" required />
+                <input type="tel" placeholder="10-digit mobile" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} required />
               </div>
             </label>
 
@@ -96,7 +108,7 @@ export default function IndustryRegister({ onClose, onLogin, onSwitchMode }) {
               <span>Head Office / Location</span>
               <div className="role-login-input">
                 <MapPin size={15} />
-                <input type="text" placeholder="City / State" required />
+                <input type="text" placeholder="City / State" value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} required />
               </div>
             </label>
 
@@ -104,7 +116,7 @@ export default function IndustryRegister({ onClose, onLogin, onSwitchMode }) {
               <span>CSR / Focus Area</span>
               <div className="role-login-input">
                 <Landmark size={15} />
-                <input type="text" placeholder="Education, health, livelihoods, environment..." required />
+                <input type="text" placeholder="Education, health, livelihoods, environment..." value={form.focusArea} onChange={(e) => setForm({ ...form, focusArea: e.target.value })} required />
               </div>
             </label>
 
@@ -112,7 +124,7 @@ export default function IndustryRegister({ onClose, onLogin, onSwitchMode }) {
               <span>Password</span>
               <div className="role-login-input">
                 <LockKeyhole size={15} />
-                <input type={showPassword ? 'text' : 'password'} placeholder="Create password" required />
+                <input type={showPassword ? 'text' : 'password'} placeholder="Create password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} required />
                 <button type="button" onClick={() => setShowPassword((value) => !value)} aria-label="Toggle password visibility">
                   {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
                 </button>
@@ -123,7 +135,7 @@ export default function IndustryRegister({ onClose, onLogin, onSwitchMode }) {
               <span>Confirm Password</span>
               <div className="role-login-input">
                 <LockKeyhole size={15} />
-                <input type={showConfirmPassword ? 'text' : 'password'} placeholder="Re-enter password" required />
+                <input type={showConfirmPassword ? 'text' : 'password'} placeholder="Re-enter password" value={form.confirmPassword} onChange={(e) => setForm({ ...form, confirmPassword: e.target.value })} required />
                 <button type="button" onClick={() => setShowConfirmPassword((value) => !value)} aria-label="Toggle confirm password visibility">
                   {showConfirmPassword ? <EyeOff size={15} /> : <Eye size={15} />}
                 </button>
