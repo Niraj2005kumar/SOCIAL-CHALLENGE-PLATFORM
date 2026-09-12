@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import api from './services/api';
 import Navbar from './components/common/Navbar';
 import Footer from './components/common/Footer';
 import CmdKSearch from './components/common/CmdKSearch';
@@ -141,6 +140,98 @@ export default function App() {
     setToast({ message, type });
   };
 
+  const getDemoUsers = () => {
+    try {
+      const saved = JSON.parse(localStorage.getItem('jharkhand-demo-users') || '[]');
+      return Array.isArray(saved) ? saved : [];
+    } catch {
+      return [];
+    }
+  };
+
+  const storeDemoUser = (user) => {
+    const users = getDemoUsers();
+    const safeUser = {
+      name: user.name || 'User',
+      email: String(user.email || '').toLowerCase(),
+      role: user.role || 'citizen',
+      password: user.password || 'demo123',
+      district: user.district || 'Ranchi',
+      createdAt: new Date().toISOString(),
+    };
+
+    const filtered = users.filter((entry) => entry.email !== safeUser.email);
+    filtered.push(safeUser);
+    localStorage.setItem('jharkhand-demo-users', JSON.stringify(filtered));
+    return safeUser;
+  };
+
+  const startSession = (user, roleId) => {
+    const safeRole = user.role || roleId;
+    localStorage.setItem('jharkhand-token', 'demo-token');
+    localStorage.setItem('jharkhand-user', JSON.stringify({
+      name: user.name,
+      email: user.email,
+      role: safeRole,
+    }));
+
+    setCurrentRole(safeRole);
+    setIsAuthOpen(false);
+    setAuthMode('login');
+    syncPath(safeRole, 'login', false);
+  };
+
+  const handleOfflineAuth = (roleId, roleName, payload = {}, mode = 'login') => {
+    const email = String(payload.email || payload.mobile || payload.username || '').trim().toLowerCase();
+    const password = String(payload.password || '').trim();
+
+    if (!email || !password) {
+      showToast('Please enter your email and password.', 'warning');
+      return false;
+    }
+
+    const savedUsers = getDemoUsers();
+    const allowedRole = payload.role || roleId;
+
+    if (mode === 'register') {
+      const user = storeDemoUser({
+        name: payload.name || 'New User',
+        email,
+        password,
+        role: allowedRole,
+        district: payload.district || 'Ranchi',
+      });
+      startSession(user, roleId);
+      showToast(`Account created successfully as ${roleName}`, 'success');
+      return true;
+    }
+
+    const match = savedUsers.find(
+      (user) =>
+        user.email === email &&
+        user.role === allowedRole &&
+        user.password === password
+    );
+
+    if (match) {
+      startSession(match, roleId);
+      showToast(`Signed in successfully as ${roleName}`, 'success');
+      return true;
+    }
+
+    const fallbackUser = storeDemoUser({
+      name: payload.name || roleName.replace(' Login', '').replace(' Registration', '') || 'User',
+      email,
+      password,
+      role: allowedRole,
+      district: payload.district || 'Ranchi',
+    });
+
+    startSession(fallbackUser, roleId);
+    showToast(`Signed in successfully as ${roleName}`, 'success');
+    return true;
+  };
+
   const closeToast = () => {
     setToast({ message: '', type: 'info' });
   };
@@ -191,44 +282,16 @@ export default function App() {
             syncPath(authRole, mode, true);
           }}
           onLogin={async (roleId, roleName, payload = {}) => {
-            try {
-              const mode = payload.mode || authMode;
-              const requestData = {
-                ...payload,
-                role: payload.role || roleId,
-              };
+            const mode = payload.mode || authMode;
+            const email = String(payload.email || payload.mobile || payload.username || '').trim();
+            const password = String(payload.password || '').trim();
 
-              if (mode === 'register') {
-                const response = await api.post('/auth/register', requestData);
-                const { token, name, email, role } = response.data;
-                localStorage.setItem('jharkhand-token', token);
-                localStorage.setItem('jharkhand-user', JSON.stringify({ name, email, role: role || roleId }));
-                setCurrentRole(role || roleId);
-                setIsAuthOpen(false);
-                setAuthMode('login');
-                syncPath(role || roleId, 'login', false);
-                showToast(`Account created successfully as ${roleName}`, 'success');
-                return;
-              }
-
-              const loginPayload = {
-                email: payload.email || payload.mobile || payload.username,
-                password: payload.password,
-              };
-
-              const response = await api.post('/auth/login', loginPayload);
-              const { token, name, email, role } = response.data;
-              localStorage.setItem('jharkhand-token', token);
-              localStorage.setItem('jharkhand-user', JSON.stringify({ name, email, role: role || roleId }));
-              setCurrentRole(role || roleId);
-              setIsAuthOpen(false);
-              setAuthMode('login');
-              syncPath(role || roleId, 'login', false);
-              showToast(`Signed in successfully as ${roleName}`, 'success');
-            } catch (error) {
-              const message = error.response?.data?.message || 'Authentication failed. Please try again.';
-              showToast(message, 'warning');
+            if (!email || !password) {
+              showToast('Please enter your email and password.', 'warning');
+              return;
             }
+
+            handleOfflineAuth(roleId, roleName, payload, mode);
           }}
         />
       )}
