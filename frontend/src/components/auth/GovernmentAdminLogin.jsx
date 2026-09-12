@@ -9,6 +9,7 @@ export default function GovernmentAdminLogin({ onClose, onLogin }) {
 
   return (
     <div className="role-login-overlay" onClick={onClose}>
+
       <section className="role-login-modal" style={{ '--login-accent': '#1769ee', '--login-soft': '#eaf2ff' }} onClick={(event) => event.stopPropagation()} aria-label="Government Admin Login">
         <button className="role-login-close" type="button" onClick={onClose} aria-label="Close login"><X size={18} /></button>
         <div className="role-login-watermark" aria-hidden="true"><JharkhandLogo mode="watermark" size={520} /></div>
